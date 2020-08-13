@@ -1,0 +1,4 @@
+'*.{ts,tsx,js,jsx}':
+    - yarn run lint
+    - yarn run format
+    - git add
