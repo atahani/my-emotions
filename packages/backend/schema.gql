@@ -2,6 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserApp {
+  id: ID!
+  refreshedAt: DateTime!
+  authorizedAt: DateTime!
+  thirdPartyAuthenticatorType: ThirdPartyAuthenticatorType
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum ThirdPartyAuthenticatorType {
+  GOOGLE
+}
+
+type MutationStatus {
+  isSucceeded: Boolean!
+  message: String!
+}
+
 type Query {
-  hello: String!
+  apps: [UserApp!]!
+}
+
+type Mutation {
+  revoke(appId: String): MutationStatus!
 }

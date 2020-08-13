@@ -50,4 +50,13 @@ export class UserAppService {
         )
         return clearRefreshToken
     }
+
+    async getApps(userId: string): Promise<UserApp[]> {
+        return await this.userAppRepository.find({ userId })
+    }
+
+    async revoke(id: string, userId: string): Promise<boolean> {
+        const result = await this.userAppRepository.delete({ id, userId })
+        return result.affected !== 0
+    }
 }
