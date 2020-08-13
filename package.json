@@ -1,0 +1,24 @@
+{
+    "name": "root",
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ]
+    },
+    "scripts": {
+        "bootstrap": "lerna bootstrap",
+        "build": "lerna run build",
+        "clean": "lerna clean"
+    },
+    "devDependencies": {
+        "husky": "^4.2.5",
+        "lerna": "^3.20.2",
+        "prettier": "^2.0.5"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lerna run --concurrency 1 --stream precommit"
+        }
+    }
+}
