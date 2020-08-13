@@ -8,12 +8,15 @@
     },
     "scripts": {
         "bootstrap": "lerna bootstrap",
+        "build:types": "lerna run --scope @my-emotions/types build",
+        "postinstall": "yarn run bootstrap && yarn run build:types",
         "build": "lerna run build",
         "clean": "lerna clean"
     },
     "devDependencies": {
         "husky": "^4.2.5",
         "lerna": "^3.20.2",
+        "lint-staged": "^10.2.11",
         "prettier": "^2.0.5"
     },
     "husky": {

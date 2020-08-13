@@ -1,26 +1,35 @@
 {
-  "name": "@my-emotions/types",
-  "version": "0.0.0",
-  "description": "> TODO: description",
-  "author": "Ahmad Tahani <ahmad.tahani@gmail.com>",
-  "homepage": "https://github.com/atahani/my-emotions#readme",
-  "license": "ISC",
-  "main": "lib/types.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/atahani/my-emotions.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/atahani/my-emotions/issues"
-  }
+    "name": "@my-emotions/types",
+    "version": "0.0.1",
+    "description": "types of My Emotions",
+    "author": "Ahmad Tahani <ahmad.tahani@gmail.com>",
+    "homepage": "https://github.com/atahani/my-emotions#readme",
+    "license": "ISC",
+    "main": "dist/index.js",
+    "files": [
+        "dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/atahani/my-emotions.git"
+    },
+    "scripts": {
+        "build": "npm run clean && npm run compile",
+        "clean": "rm -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx .",
+        "precommit": "lint-staged",
+        "format": "prettier --write \"src/**/*.ts\""
+    },
+    "bugs": {
+        "url": "https://github.com/atahani/my-emotions/issues"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^3.9.0",
+        "@typescript-eslint/parser": "^3.9.0",
+        "eslint": "^7.6.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-import": "^2.22.0",
+        "typescript": "^3.9.7"
+    }
 }
