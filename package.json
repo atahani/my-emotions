@@ -23,5 +23,10 @@
         "hooks": {
             "pre-commit": "lerna run --concurrency 1 --stream precommit"
         }
+    },
+    "dependencies": {
+        "@nestjs/graphql": "^7.6.0",
+        "class-validator": "^0.12.2",
+        "typeorm": "^0.2.25"
     }
 }
