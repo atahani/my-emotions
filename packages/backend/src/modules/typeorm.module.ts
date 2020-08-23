@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import * as path from 'path'
 
-import { User, UserApp } from '@my-emotions/types'
+import { User, UserApp, Emotion } from '@my-emotions/types'
 
 const ENV = process.env.NODE_ENV
 
@@ -18,7 +18,7 @@ const ENV = process.env.NODE_ENV
                 username: config.get('pg.username'),
                 password: config.get('pg.password'),
                 database: config.get('pg.database'),
-                entities: [User, UserApp],
+                entities: [User, UserApp, Emotion],
                 synchronize: true,
                 logging: ENV !== 'test',
                 dropSchema: ENV === 'test',

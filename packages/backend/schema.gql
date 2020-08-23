@@ -18,6 +18,24 @@ enum ThirdPartyAuthenticatorType {
   GOOGLE
 }
 
+type ActionStatus {
+  message: String!
+}
+
+type UserBriefProfileView {
+  id: String!
+  displayName: String!
+  imageURL: String
+}
+
+type EmotionView {
+  id: String!
+  userBriefProfileView: UserBriefProfileView!
+  text: String!
+  emoji: String!
+  createdAt: DateTime!
+}
+
 type MutationStatus {
   isSucceeded: Boolean!
   message: String!
@@ -25,8 +43,17 @@ type MutationStatus {
 
 type Query {
   apps: [UserApp!]!
+  emotions(offset: Float = 0, limit: Float = 10, userId: String): [EmotionView!]!
+  emotion(id: String!): EmotionView!
 }
 
 type Mutation {
   revoke(appId: String): MutationStatus!
+  releaseEmotion(data: ReleaseEmotionInput!): String!
+  forgotEmotion(id: String!): ActionStatus!
+}
+
+input ReleaseEmotionInput {
+  text: String!
+  emoji: String!
 }

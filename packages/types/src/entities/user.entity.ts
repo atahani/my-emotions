@@ -1,5 +1,6 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, Index, ManyToOne, UpdateDateColumn } from 'typeorm'
 
+import { Emotion } from './emotion.entity'
 import { UserApp } from './userApp.entity'
 import { UserDataProvider } from '../providers'
 
@@ -43,4 +44,9 @@ export class User extends BaseEntity {
         onDelete: 'CASCADE',
     })
     userApps: UserApp[]
+
+    @ManyToOne(() => Emotion, (emotion) => emotion.user, {
+        onDelete: 'CASCADE',
+    })
+    emotions: Emotion[]
 }
