@@ -1,10 +1,11 @@
 import { NotFoundException, UseGuards } from '@nestjs/common'
-import { Resolver, Mutation, Args, Query } from '@nestjs/graphql'
+import { Resolver, Mutation, Args, Query, Subscription } from '@nestjs/graphql'
 
 import { ReleaseEmotionInput, ActionStatus, EmotionView } from '@my-emotions/types'
 
 import { CurrentUserId } from 'common/decorator'
 import { EmotionAuthGuard } from 'common/guard'
+
 import { EmotionService } from './emotion.service'
 
 @UseGuards(EmotionAuthGuard)
@@ -49,5 +50,14 @@ export class EmotionResolver {
             throw new NotFoundException(`can't find any emotion with this id`)
         }
         return emotion
+    }
+
+    @Subscription(() => EmotionView, {
+        resolve(this, value) {
+            return { ...value, createdAt: new Date(value.createdAt) }
+        },
+    })
+    newEmotion(): AsyncIterator<EmotionView> {
+        return this.emotionService.notifyNewEmotion()
     }
 }

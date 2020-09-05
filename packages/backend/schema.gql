@@ -33,7 +33,7 @@ type EmotionView {
   userBriefProfileView: UserBriefProfileView!
   text: String!
   emoji: String!
-  createdAt: DateTime!
+  createdAt: DateTime
 }
 
 type MutationStatus {
@@ -56,4 +56,8 @@ type Mutation {
 input ReleaseEmotionInput {
   text: String!
   emoji: String!
+}
+
+type Subscription {
+  newEmotion: EmotionView!
 }

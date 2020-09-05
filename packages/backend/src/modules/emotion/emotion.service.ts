@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 
 import { Emotion, EmotionView } from '@my-emotions/types'
 
+import { PostgresListenerService } from 'common/service/pg.listener.service'
 import { PostgresService } from 'common/service/pg.service'
 
 @Injectable()
@@ -11,7 +12,13 @@ export class EmotionService {
     constructor(
         @InjectRepository(Emotion) private readonly emotionRepository: Repository<Emotion>,
         private readonly pgService: PostgresService,
-    ) {}
+        private readonly pgListener: PostgresListenerService,
+    ) {
+        ;(async () => {
+            await pgListener.addChannel('new_emotion')
+            return this
+        })()
+    }
 
     async create(userId: string, text: string, emoji: string): Promise<Emotion> {
         const em = new Emotion()
@@ -72,5 +79,9 @@ export class EmotionService {
             [userId, offset, limit],
         )
         return result.rows
+    }
+
+    notifyNewEmotion(): AsyncIterableIterator<EmotionView> {
+        return this.pgListener.getChannelIteratorByChannel('new_emotion')
     }
 }

@@ -32,6 +32,7 @@
         "bcryptjs": "^2.4.3",
         "class-transformer": "^0.3.1",
         "cookie-parser": "^1.4.5",
+        "emittery": "^0.7.1",
         "graphql": "^15.3.0",
         "graphql-tools": "^6.0.18",
         "ioredis": "^4.17.3",

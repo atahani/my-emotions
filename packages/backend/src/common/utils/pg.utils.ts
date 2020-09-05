@@ -38,7 +38,12 @@ export const createDBIfNotExist = async (databaseName = pg.database): Promise<vo
     await client.end()
 }
 
-const sqlFiles = ['index/m_user_providers_gin_idx.index.sql']
+const sqlFiles = [
+    'index/m_user_providers_gin_idx.index.sql',
+    'func/get_emotion_view_by_id.func.sql',
+    'func/notify_new_emotion.func.sql',
+    'trigger/notify_new_emotion.trigger.sql',
+]
 
 export const runSQLFiles = async (): Promise<void> => {
     const client = getPGClient()
