@@ -355,4 +355,12 @@ export const GlobalStyled = createGlobalStyle`
   [hidden] {
     display: none;
   }
+
+  body {
+    min-height: 100vh;
+  }
+
+  #root {
+    height: 100vh;
+  }
 `
