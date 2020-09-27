@@ -29,6 +29,7 @@ import { EmotionModule } from './emotion/emotion.module'
                                 )
                             },
                         },
+                        cors: { credentials: true, origin: config.get('client.pwaEndpoint') },
                     },
                     config.get('graphql'),
                 )

@@ -21,8 +21,11 @@ async function bootstrap() {
     })
 
     app.use(CookieParser(config.get('app.cookieSecret')))
+    app.enableCors({ credentials: true, origin: config.get('client.pwaEndpoint') })
 
     app.useGlobalPipes(new ValidationPipe())
+
+    await app.init()
 
     await app.listen(config.get('app.port'), () => {
         console.warn(`The Global is available on ${config.get('app.graphqlEndpoint')}`)

@@ -33,7 +33,7 @@ type EmotionView {
   userBriefProfileView: UserBriefProfileView!
   text: String!
   emoji: String!
-  createdAt: DateTime
+  createdAt: DateTime!
 }
 
 type MutationStatus {
