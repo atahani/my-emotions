@@ -1,6 +1,7 @@
 import { AuthGuard } from '@nestjs/passport'
-import { Controller, Get, UseGuards, Request, BadRequestException } from '@nestjs/common'
+import { Controller, Get, UseGuards, Request, BadRequestException, Response } from '@nestjs/common'
 import { InjectConfig, ConfigService } from 'nestjs-config'
+import { Response as ExpressResponse } from 'express'
 
 import { CustomRequest } from 'common/types'
 import { ThirdPartyAuthenticatorType, UserAccessData } from '@my-emotions/types'
@@ -29,8 +30,9 @@ export class AuthController {
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(
         @Request() req: CustomRequest,
+        @Response() res: ExpressResponse,
         @SetCookie() setCookie: SetCookie,
-    ): Promise<UserAccessData> {
+    ): Promise<void> {
         if (!req.user) {
             throw new BadRequestException('something wrong while getting the user google data')
         }
@@ -49,6 +51,9 @@ export class AuthController {
         setCookie(COOKIE_APP_ID, tokenData.appId)
         setCookie(COOKIE_REFRESH_TOKEN, tokenData.refreshToken)
 
-        return new UserAccessData(user.id, tokenData.appId, tokenData.accessToken)
+        res.redirect(
+            303,
+            `${this.config.get('client.pwaEndpoint')}/login/callback?userId=${user.id}&appId=${tokenData.appId}`,
+        )
     }
 }
