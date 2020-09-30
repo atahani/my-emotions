@@ -1,13 +1,13 @@
 import { Redirect } from 'react-router-dom'
 import React from 'react'
 
-import { getUserId } from 'utils/persistData'
+import { isLoggedIn } from 'utils/persistData'
 import { googleSignInUri } from 'utils/env'
 
 import { Wrapper, LogoWrapper, Logo, Footer, GoogleSignInBtn } from './styles'
 
 const Login = () => {
-    if (getUserId()) {
+    if (isLoggedIn()) {
         return <Redirect to="/" />
     }
     return (

@@ -1,19 +1,23 @@
-import { Redirect, useLocation } from 'react-router-dom'
-import React from 'react'
+import { useHistory } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
 
-import { setUserInformation } from 'utils/persistData'
+import { UserProfileView } from '@my-emotions/types'
+
+import { GET_PROFILE } from 'utils/gql'
+import { setUserProfile } from 'utils/persistData'
 
 const LoginCallback = () => {
-    const { search } = useLocation()
-    const query = new URLSearchParams(search)
-    const userId = query.get('userId')
-    const appId = query.get('appId')
-    if (userId && appId) {
-        setUserInformation(userId, appId)
-        return <Redirect to="/" />
-    } else {
-        return <Redirect to="/login" />
-    }
+    const { push } = useHistory()
+    useQuery<{ profile: UserProfileView }>(GET_PROFILE, {
+        onCompleted: (data) => {
+            setUserProfile(data.profile)
+            push('/')
+        },
+        onError: () => {
+            push('/login')
+        },
+    })
+    return null
 }
 
 export default LoginCallback

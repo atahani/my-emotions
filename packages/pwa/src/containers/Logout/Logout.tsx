@@ -1,15 +1,15 @@
-import { Redirect, useHistory } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
-import React, { useEffect } from 'react'
 
 import { MutationStatus } from '@my-emotions/types'
 
-import { getAppId, clearLocalStorage } from 'utils/persistData'
+import { clearLocalStorage } from 'utils/persistData'
 import { REVOKE_APP } from 'utils/gql'
 
 const Logout = () => {
     const { replace } = useHistory()
-    const [revoke] = useMutation<{ revoke: MutationStatus }, { appId: string }>(REVOKE_APP, {
+    const [revoke] = useMutation<{ revoke: MutationStatus }>(REVOKE_APP, {
         onCompleted: () => {
             clearLocalStorage()
             replace('/')
@@ -20,14 +20,8 @@ const Logout = () => {
         },
     })
     useEffect(() => {
-        const appId = getAppId()
-        if (appId) {
-            revoke({ variables: { appId } })
-        }
+        revoke()
     }, [revoke])
-    if (!getAppId()) {
-        return <Redirect to="/" />
-    }
     //TODO: can be present a loading
     return null
 }
