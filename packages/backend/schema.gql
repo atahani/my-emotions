@@ -41,10 +41,20 @@ type MutationStatus {
   message: String!
 }
 
+type UserProfileView {
+  id: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  displayName: String!
+  imageURL: String
+}
+
 type Query {
   apps: [UserApp!]!
   emotions(offset: Float = 0, limit: Float = 10, userId: String): [EmotionView!]!
   emotion(id: String!): EmotionView!
+  profile: UserProfileView!
 }
 
 type Mutation {

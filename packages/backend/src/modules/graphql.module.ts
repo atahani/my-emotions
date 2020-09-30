@@ -5,10 +5,12 @@ import CookieParser from 'cookie-parser'
 
 import { AuthModule } from './auth/auth.module'
 import { EmotionModule } from './emotion/emotion.module'
+import { UserModule } from './user/user.module'
 
 @Module({
     imports: [
         AuthModule,
+        UserModule,
         EmotionModule,
         GraphQLModule.forRootAsync({
             useFactory: (config: ConfigService) => {

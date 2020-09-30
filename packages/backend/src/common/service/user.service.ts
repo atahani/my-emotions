@@ -1,7 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm'
+import { plainToClass } from 'class-transformer'
 import { Repository } from 'typeorm'
 
-import { User, PassportUserData, UserDataProvider } from '@my-emotions/types'
+import { User, PassportUserData, UserDataProvider, UserProfileView } from '@my-emotions/types'
 
 import { PostgresService } from './pg.service'
 
@@ -33,5 +34,10 @@ export class UserService {
             JSON.stringify([dataProvider]),
         ])
         return result.rows[0]
+    }
+
+    async getUserProfileViewById(id: string): Promise<UserProfileView> {
+        const user = await this.userRepository.findOne({ id })
+        return plainToClass(UserProfileView, user)
     }
 }
