@@ -21,3 +21,9 @@ export const GET_PROFILE = gql`
         }
     }
 `
+
+export const RELEASE_EMOTION = gql`
+    mutation ReleaseEmotion($data: ReleaseEmotionInput!) {
+        releaseEmotion(data: $data)
+    }
+`
