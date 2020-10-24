@@ -50,9 +50,16 @@ type UserProfileView {
   imageURL: String
 }
 
+type PaginatedEmotionView {
+  page: Float!
+  totalPage: Float!
+  totalItems: Float!
+  items: [EmotionView!]!
+}
+
 type Query {
   apps: [UserApp!]!
-  emotions(offset: Float = 0, limit: Float = 10, userId: String): [EmotionView!]!
+  emotions(itemPerPage: Float = 10, page: Float = 1, userId: String): PaginatedEmotionView!
   emotion(id: String!): EmotionView!
   profile: UserProfileView!
 }

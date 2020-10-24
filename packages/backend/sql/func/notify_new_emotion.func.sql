@@ -7,7 +7,9 @@ BEGIN
         SELECT
           t FROM (
             SELECT
-              * FROM get_emotion_view_by_id (NEW.id)) AS t))::text);
+              * FROM emotion_view
+            WHERE
+              id = NEW.id) AS t))::text);
   RETURN NULL;
 END;
 $BODY$

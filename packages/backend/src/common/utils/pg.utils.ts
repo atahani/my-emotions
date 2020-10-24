@@ -40,7 +40,7 @@ export const createDBIfNotExist = async (databaseName = pg.database): Promise<vo
 
 const sqlFiles = [
     'index/m_user_providers_gin_idx.index.sql',
-    'func/get_emotion_view_by_id.func.sql',
+    'view/emotion_view.view.sql',
     'func/notify_new_emotion.func.sql',
     'trigger/notify_new_emotion.trigger.sql',
 ]

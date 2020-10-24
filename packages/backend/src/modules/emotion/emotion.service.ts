@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Emotion, EmotionView } from '@my-emotions/types'
+import { Emotion, EmotionView, PaginatedResponse } from '@my-emotions/types'
 
 import { PostgresListenerService } from 'common/service/pg.listener.service'
 import { PostgresService } from 'common/service/pg.service'
@@ -34,51 +34,38 @@ export class EmotionService {
     }
 
     async getEmotion(id: string): Promise<EmotionView> {
-        const result = await this.pgService.runQuery<EmotionView>(
-            `select 
-          e.id, 
-          e.text, 
-          json_build_object('id', u.id, 'displayName', u.display_name, 'imageURL', u.image_url) as "userBriefProfileView", 
-          e.emoji, 
-          e.created_at as "createdAt" 
-            from emotion as e join m_user as u 
-              on e.user_id = u.id where e.id = $1`,
-            [id],
-        )
-        return result.rows[0]
+        return (await this.pgService.runQuery<EmotionView>(`select * from emotion_view where id = $1`, [id])).rows[0]
     }
 
-    async getEmotions(offset = 0, limit = 10): Promise<EmotionView[]> {
-        const result = await this.pgService.runQuery<EmotionView>(
-            `select 
-            e.id, 
-            e.text, 
-            json_build_object('id', u.id, 'displayName', u.display_name, 'imageURL', u.image_url) as "userBriefProfileView", 
-            e.emoji, 
-            e.created_at as "createdAt" 
-              from emotion as e join m_user as u 
-                on e.user_id = u.id 
-                  order by e.created_at DESC offset $1 limit $2;`,
-            [offset, limit],
-        )
-        return result.rows
-    }
-
-    async getUserEmotions(userId: string, offset = 0, limit = 10): Promise<EmotionView[]> {
-        const result = await this.pgService.runQuery<EmotionView>(
-            `select 
-          e.id, 
-          e.text, 
-          json_build_object('id', u.id, 'displayName', u.display_name, 'imageURL', u.image_url) as "userBriefProfileView", 
-          e.emoji, 
-          e.created_at as "createdAt" 
-            from emotion as e join m_user as u 
-              on e.user_id = u.id 
-              where e.user_id = $1
-                order by e.created_at DESC offset $2 limit $3;`,
-            [userId, offset, limit],
-        )
-        return result.rows
+    async getEmotions(userId?: string, page = 1, itemPerPage = 10): Promise<PaginatedResponse<EmotionView>> {
+        const queryValues: any[] = [(page - 1) * itemPerPage, itemPerPage]
+        const whereSections = []
+        if (userId) {
+            queryValues.push(userId)
+            whereSections.push(`"userId" = $${queryValues.length}`)
+        }
+        const result = (
+            await this.pgService.runQuery<{ count: number; items: EmotionView[] }>(
+                `
+            select
+            (SELECT count(id) FROM emotion_view ${
+                whereSections.length === 0 ? '' : 'where ' + whereSections.join(' and ')
+            }), 
+            (select json_agg(r) from 
+                (select * from emotion_view ${
+                    whereSections.length === 0 ? '' : 'where ' + whereSections.join(' and ')
+                } order by "createdAt" DESC offset $1 limit $2) as r
+                ) as "items"
+            `,
+                queryValues,
+            )
+        ).rows[0]
+        return {
+            page,
+            totalPage: Math.ceil(result.count / itemPerPage),
+            totalItems: result.count,
+            items: result.items ? result.items : [],
+        }
     }
 
     notifyNewEmotion(): AsyncIterableIterator<EmotionView> {
