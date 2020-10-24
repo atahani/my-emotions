@@ -12,13 +12,20 @@ const Img = styled('img')<ImgProps>`
 `
 
 type Props = {
+    className?: string
     value: string
     size?: number
 }
 
-const EmojiIcon: React.FC<Props> = ({ value, size }) =>
+const EmojiIcon: React.FC<Props> = ({ className, value, size }) =>
     emoji(value, (code, string, key) => (
-        <Img src={`https://twemoji.maxcdn.com/2/svg/${code}.svg`} size={size} alt={string} key={key} />
+        <Img
+            className={className}
+            src={`https://twemoji.maxcdn.com/2/svg/${code}.svg`}
+            size={size}
+            alt={string}
+            key={key}
+        />
     ))
 
 export default EmojiIcon
