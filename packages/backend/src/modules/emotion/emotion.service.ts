@@ -58,7 +58,7 @@ export class EmotionService {
             e.created_at as "createdAt" 
               from emotion as e join m_user as u 
                 on e.user_id = u.id 
-                  order by e.created_at offset $1 limit $2;`,
+                  order by e.created_at DESC offset $1 limit $2;`,
             [offset, limit],
         )
         return result.rows
@@ -75,7 +75,7 @@ export class EmotionService {
             from emotion as e join m_user as u 
               on e.user_id = u.id 
               where e.user_id = $1
-                order by e.created_at offset $2 limit $3;`,
+                order by e.created_at DESC offset $2 limit $3;`,
             [userId, offset, limit],
         )
         return result.rows
