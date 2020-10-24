@@ -1,27 +1,10 @@
 import styled from 'styled-components'
 
+import { appBarHeightInRem } from 'utils/style/fixedSizes'
 import { primaryColor, white } from 'utils/style/colors'
 
 export const Wrapper = styled('div')`
     height: 100%;
-`
-
-export const Header = styled('div')`
-    align-items: center;
-    border-bottom: 2px solid #f2464696;
-    display: flex;
-    flex-direction: row;
-    height: 4rem;
-    justify-content: space-between;
-    padding: 0px 1rem;
-`
-
-export const Title = styled('h1')`
-    flex: auto;
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin: 0;
-    text-align: center;
 `
 
 export const UnreleasedTitleWrapper = styled('div')`
@@ -36,7 +19,7 @@ export const UnreleasedTitleWrapper = styled('div')`
 export const Content = styled('div')`
     display: flex;
     justify-content: center;
-    padding: 1rem 0.5rem;
+    padding-top: ${appBarHeightInRem + 1}rem;
 `
 
 export const Form = styled('form')`
