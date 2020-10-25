@@ -4,15 +4,13 @@
 
 type UserApp {
   id: ID!
-  refreshedAt: DateTime!
-  authorizedAt: DateTime!
+  refreshedAt: Date!
+  authorizedAt: Date!
   thirdPartyAuthenticatorType: ThirdPartyAuthenticatorType
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+"""Date custom scalar type"""
+scalar Date
 
 enum ThirdPartyAuthenticatorType {
   GOOGLE
@@ -33,7 +31,7 @@ type EmotionView {
   userBriefProfileView: UserBriefProfileView!
   text: String!
   emoji: String!
-  createdAt: DateTime!
+  createdAt: Date!
 }
 
 type MutationStatus {
@@ -51,9 +49,9 @@ type UserProfileView {
 }
 
 type PaginatedEmotionView {
-  page: Float!
-  totalPage: Float!
-  totalItems: Float!
+  page: Int!
+  totalPage: Int!
+  totalItems: Int!
   items: [EmotionView!]!
 }
 

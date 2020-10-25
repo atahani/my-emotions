@@ -51,6 +51,7 @@ export class EmotionResolver {
     }
 
     @Subscription(() => EmotionView, {
+        // since it's based on WebSockets the DateScalar won't be affected
         resolve(this, value) {
             return { ...value, createdAt: new Date(value.createdAt) }
         },

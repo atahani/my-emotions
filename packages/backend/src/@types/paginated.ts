@@ -1,23 +1,20 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Type } from '@nestjs/common'
 
-export interface ClassType<T = any> {
-    new (...args: any[]): T
-}
-
-export default function PaginatedResponse<TItemsFieldValue>(itemsFieldValue: ClassType<TItemsFieldValue>): any {
+export default function PaginatedResponse<T>(classRef: Type<T>): any {
     @ObjectType({ isAbstract: true })
     abstract class PaginatedResponse<T> {
-        @Field()
+        @Field((type) => Int)
         page: number
 
-        @Field()
+        @Field((type) => Int)
         totalPage: number
 
-        @Field()
+        @Field((type) => Int)
         totalItems: number
 
-        @Field(() => [itemsFieldValue])
-        items: TItemsFieldValue[]
+        @Field((type) => [classRef])
+        items: T[]
     }
     return PaginatedResponse
 }
