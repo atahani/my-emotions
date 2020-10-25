@@ -1,23 +1,37 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/react-hooks'
+import 'react-toastify/dist/ReactToastify.css'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { BrowserRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import GlobalErrorBoundary from 'components/GlobalErrorBoundary'
 import MainApp from 'containers/MainApp'
 
+import { apolloClient } from 'utils/graphql/client'
 import { GlobalStyled } from 'utils/style/global'
-import { serverGraphqlUri } from 'utils/env'
 
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
-    <ApolloProvider
-        client={new ApolloClient({ uri: serverGraphqlUri, credentials: 'include', cache: new InMemoryCache() })}
-    >
+    <ApolloProvider client={apolloClient}>
         <BrowserRouter>
             <React.StrictMode>
                 <GlobalStyled />
-                <MainApp />
+                <GlobalErrorBoundary>
+                    <MainApp />
+                </GlobalErrorBoundary>
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </React.StrictMode>
         </BrowserRouter>
     </ApolloProvider>,

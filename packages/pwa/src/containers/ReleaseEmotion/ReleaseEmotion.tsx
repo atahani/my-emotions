@@ -9,7 +9,8 @@ import EmojiButton from 'components/EmojiButton'
 import EmojiIcon from 'components/EmojiIcon'
 import EmojiSelector from 'components/EmojiSelector'
 
-import { RELEASE_EMOTION } from 'utils/gql'
+import { handleCommonErr } from 'utils/graphql/handleError'
+import { RELEASE_EMOTION } from 'utils/graphql/gql'
 import { stripEmoji } from 'utils/parser'
 
 import { Wrapper, Content, Form, NewEmotionTXT, UnreleasedTitleWrapper, FullWidthSubmit } from './styles'
@@ -22,8 +23,11 @@ const ReleaseEmotion = () => {
         RELEASE_EMOTION,
         {
             onCompleted: (data) => {
-                replace('/')
+                if (data) {
+                    replace('/')
+                }
             },
+            onError: handleCommonErr,
         },
     )
 

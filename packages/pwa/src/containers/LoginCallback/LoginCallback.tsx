@@ -3,7 +3,8 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { UserProfileView } from '@my-emotions/types'
 
-import { GET_PROFILE } from 'utils/gql'
+import { GET_PROFILE } from 'utils/graphql/gql'
+import { handleCommonErr } from 'utils/graphql/handleError'
 import { setUserProfile } from 'utils/persistData'
 
 const LoginCallback = () => {
@@ -13,9 +14,10 @@ const LoginCallback = () => {
             setUserProfile(data.profile)
             push('/')
         },
-        onError: () => {
-            push('/login')
-        },
+        onError: (err) =>
+            handleCommonErr(err, () => {
+                push('/login')
+            }),
     })
     return null
 }

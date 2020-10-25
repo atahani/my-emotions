@@ -5,7 +5,8 @@ import { useMutation } from '@apollo/react-hooks'
 import { MutationStatus } from '@my-emotions/types'
 
 import { clearLocalStorage } from 'utils/persistData'
-import { REVOKE_APP } from 'utils/gql'
+import { handleCommonErr } from 'utils/graphql/handleError'
+import { REVOKE_APP } from 'utils/graphql/gql'
 
 const Logout = () => {
     const { replace } = useHistory()
@@ -14,10 +15,11 @@ const Logout = () => {
             clearLocalStorage()
             replace('/')
         },
-        onError: (err) => {
-            clearLocalStorage()
-            replace('/')
-        },
+        onError: (err) =>
+            handleCommonErr(err, () => {
+                clearLocalStorage()
+                replace('/')
+            }),
     })
     useEffect(() => {
         revoke()
