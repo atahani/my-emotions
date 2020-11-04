@@ -2,9 +2,7 @@ import styled from 'styled-components'
 
 import { appBarHeightInRem } from 'utils/style/fixedSizes'
 
-export const List = styled('div')`
-    display: flex;
-    flex-direction: column;
+export const Content = styled('div')`
     padding-top: ${appBarHeightInRem}rem;
 `
 

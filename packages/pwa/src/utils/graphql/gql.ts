@@ -27,3 +27,24 @@ export const RELEASE_EMOTION = gql`
         releaseEmotion(data: $data)
     }
 `
+
+export const GET_EMOTIONS = gql`
+    query GetEmotions($page: Int, $itemPerPage: Int, $userId: String) {
+        emotions(page: $page, itemPerPage: $itemPerPage, userId: $userId) {
+            page
+            totalItems
+            totalPage
+            items {
+                id
+                text
+                emoji
+                createdAt
+                userBriefProfileView {
+                    id
+                    displayName
+                    imageURL
+                }
+            }
+        }
+    }
+`

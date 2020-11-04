@@ -18,8 +18,10 @@ export const handleCommonErr = (error: ApolloError, handleMore?: () => void) => 
         const isOnline = typeof navigator.onLine === 'boolean' ? navigator.onLine : true
         if (!isOnline) {
             toast.warning(messages.noInternetConnection)
+            return
         }
         toast.error(messages.connectionRefused)
+        return
     }
     if (handleMore) {
         return handleMore()
