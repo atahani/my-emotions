@@ -57,7 +57,7 @@ type PaginatedEmotionView {
 
 type Query {
   apps: [UserApp!]!
-  emotions(itemPerPage: Float = 10, page: Float = 1, userId: String): PaginatedEmotionView!
+  emotions(itemPerPage: Int = 10, page: Int = 1, userId: String): PaginatedEmotionView!
   emotion(id: String!): EmotionView!
   profile: UserProfileView!
 }

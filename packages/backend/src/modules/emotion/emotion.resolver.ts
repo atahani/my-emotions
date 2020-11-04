@@ -1,5 +1,5 @@
 import { NotFoundException, UseGuards } from '@nestjs/common'
-import { Resolver, Mutation, Args, Query, Subscription } from '@nestjs/graphql'
+import { Resolver, Mutation, Args, Query, Subscription, Int } from '@nestjs/graphql'
 
 import { PaginatedEmotionView } from '@types'
 import { ReleaseEmotionInput, ActionStatus, EmotionView } from '@my-emotions/types'
@@ -9,12 +9,12 @@ import { EmotionAuthGuard } from 'common/guard'
 
 import { EmotionService } from './emotion.service'
 
-@UseGuards(EmotionAuthGuard)
 @Resolver()
 export class EmotionResolver {
     constructor(private readonly emotionService: EmotionService) {}
 
     @Mutation(() => String)
+    @UseGuards(EmotionAuthGuard)
     async releaseEmotion(
         @CurrentUserId() userId: string,
         @Args('data') { text, emoji }: ReleaseEmotionInput,
@@ -24,6 +24,7 @@ export class EmotionResolver {
     }
 
     @Mutation(() => ActionStatus)
+    @UseGuards(EmotionAuthGuard)
     async forgotEmotion(@CurrentUserId() userId: string, @Args('id') id: string): Promise<ActionStatus> {
         const canDoIt = await this.emotionService.delete(id, userId)
         if (!canDoIt) {
@@ -35,8 +36,8 @@ export class EmotionResolver {
     @Query(() => PaginatedEmotionView)
     async emotions(
         @Args('userId', { nullable: true }) userId?: string,
-        @Args('page', { nullable: true, defaultValue: 1 }) page?: number,
-        @Args('itemPerPage', { nullable: true, defaultValue: 10 }) itemPerPage?: number,
+        @Args('page', { nullable: true, defaultValue: 1, type: () => Int }) page?: number,
+        @Args('itemPerPage', { nullable: true, defaultValue: 10, type: () => Int }) itemPerPage?: number,
     ): Promise<PaginatedEmotionView> {
         return await this.emotionService.getEmotions(userId, page, itemPerPage)
     }
