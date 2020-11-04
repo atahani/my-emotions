@@ -11,6 +11,6 @@ import { EmotionService } from './emotion.service'
 
 @Module({
     imports: [TypeOrmModule.forFeature([Emotion])],
-    providers: [DateScalar,EmotionService, EmotionResolver, PostgresListenerService],
+    providers: [DateScalar, EmotionService, EmotionResolver, PostgresListenerService],
 })
 export class EmotionModule {}
