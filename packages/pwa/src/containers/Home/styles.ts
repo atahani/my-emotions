@@ -6,6 +6,9 @@ export const Content = styled('div')`
     padding-top: ${appBarHeightInRem}rem;
 `
 
-export const Logo = styled('img')`
+export const Logo = styled('img').attrs({
+    alt: 'my-emotion',
+    src: '/static/assets/svg/logo_face_red.svg',
+})`
     width: 2.7rem;
 `

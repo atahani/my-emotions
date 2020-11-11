@@ -7,11 +7,13 @@ import { EmotionView, PaginatedResponse } from '@my-emotions/types'
 
 import { GET_EMOTIONS } from 'utils/graphql/gql'
 import { handleCommonErr } from 'utils/graphql/handleError'
+import { isLoggedIn } from 'utils/persistData'
 
 import AppBar from 'components/AppBar'
 import EmojiButton from 'components/EmojiButton'
 import Emotion from 'components/Emotion'
 import Loader from 'components/Loader'
+import ProfileLinkButton from 'components/ProfileLinkButton'
 
 import { Logo, Content } from './styles'
 
@@ -44,11 +46,18 @@ const Home: React.FC = () => {
     return (
         <>
             <AppBar
-                leftNode={<Logo src="/static/assets/svg/logo_face_red.svg" alt="my-emotion" />}
+                leftNode={isLoggedIn() ? <ProfileLinkButton /> : <Logo />}
+                titleNode={isLoggedIn() && <Logo />}
                 rightNode={
-                    <Link to="/release-emotion">
-                        <EmojiButton emoji="🆕" size={28} />
-                    </Link>
+                    isLoggedIn() ? (
+                        <Link to="/release-emotion">
+                            <EmojiButton emoji="🆕" size={28} />
+                        </Link>
+                    ) : (
+                        <Link to="/login">
+                            <EmojiButton emoji="👣" size={28} />
+                        </Link>
+                    )
                 }
             />
             <Content>
