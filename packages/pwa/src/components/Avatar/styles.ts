@@ -1,19 +1,23 @@
 import styled from 'styled-components'
 
+import { primaryColor } from 'utils/style/colors'
+
 import EmojiIcon from 'components/EmojiIcon'
 
-export const Wrapper = styled('div')`
-    position: relative;
-`
+interface ImageCustomProps {
+    size: number
+    border: boolean
+}
 
-export const Image = styled('img')`
+export const Image = styled('img')<ImageCustomProps>`
     border-radius: 100%;
-    height: 3.75rem;
-    width: 3.75rem;
+    height: ${(props) => `${props.size}px`};
+    width: ${(props) => `${props.size}px`};
+    ${(props) => props.border && `border: 2px solid ${primaryColor};`}
 `
 
-export const Emoji = styled(EmojiIcon)`
-    bottom: 0;
-    position: absolute;
-    right: 0;
+export const FaceEmoji = styled(EmojiIcon).attrs({
+    value: '🙂',
+})`
+    border-radius: 100%;
 `

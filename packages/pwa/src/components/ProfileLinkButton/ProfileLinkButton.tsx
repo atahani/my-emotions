@@ -8,7 +8,7 @@ import { GET_PROFILE } from 'utils/graphql/gql'
 import { handleCommonErr } from 'utils/graphql/handleError'
 import { setUserProfile } from 'utils/persistData'
 
-import { Image, ProfileEmoji } from './styles'
+import Avatar from 'components/Avatar'
 
 const ProfileLinkButton = () => {
     const { data } = useQuery<{ profile: UserProfileView }>(GET_PROFILE, {
@@ -20,11 +20,7 @@ const ProfileLinkButton = () => {
     })
     return (
         <Link to="/profile">
-            {data?.profile.imageURL ? (
-                <Image src={data.profile.imageURL} alt={`${data.profile.displayName} Profile`} />
-            ) : (
-                <ProfileEmoji />
-            )}
+            <Avatar url={data?.profile.imageURL} name={data?.profile.displayName} size={36} border />
         </Link>
     )
 }
