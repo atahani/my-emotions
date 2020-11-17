@@ -37,7 +37,17 @@ export const GET_MY_PROFILE = gql`
 
 export const RELEASE_EMOTION = gql`
     mutation ReleaseEmotion($data: ReleaseEmotionInput!) {
-        releaseEmotion(data: $data)
+        releaseEmotion(data: $data) {
+            id
+            text
+            emoji
+            createdAt
+            userBriefProfileView {
+                id
+                displayName
+                imageURL
+            }
+        }
     }
 `
 

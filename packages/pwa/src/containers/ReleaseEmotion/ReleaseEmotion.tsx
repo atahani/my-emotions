@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import { ReleaseEmotionInput } from '@my-emotions/types'
+import { EmotionView, ReleaseEmotionInput } from '@my-emotions/types'
 
 import AppBar from 'components/AppBar'
 import EmojiButton from 'components/EmojiButton'
@@ -19,7 +19,7 @@ const ReleaseEmotion = () => {
     const { replace } = useHistory()
     const [step, setStep] = useState<number>(1)
     const [emotion, setEmotion] = useState<ReleaseEmotionInput>({ emoji: '🙂', text: '' })
-    const [releaseEmotion, { loading }] = useMutation<{ releaseEmotion: string }, { data: ReleaseEmotionInput }>(
+    const [releaseEmotion, { loading }] = useMutation<{ releaseEmotion: EmotionView }, { data: ReleaseEmotionInput }>(
         RELEASE_EMOTION,
         {
             onCompleted: (data) => {
@@ -28,6 +28,20 @@ const ReleaseEmotion = () => {
                 }
             },
             onError: handleCommonErr,
+            update: (cache, { data }) => {
+                if (data) {
+                    cache.modify({
+                        fields: {
+                            emotions(existing) {
+                                return {
+                                    ...existing,
+                                    items: [data?.releaseEmotion, ...existing.items],
+                                }
+                            },
+                        },
+                    })
+                }
+            },
         },
     )
 
