@@ -10,8 +10,21 @@ export const REVOKE_APP = gql`
 `
 
 export const GET_PROFILE = gql`
-    query Profile {
-        profile {
+    query Profile($userId: String!) {
+        profile(userId: $userId) {
+            id
+            firstName
+            lastName
+            displayName
+            imageURL
+            email
+        }
+    }
+`
+
+export const GET_MY_PROFILE = gql`
+    query MyProfile {
+        myProfile {
             id
             firstName
             lastName

@@ -3,15 +3,15 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { UserProfileView } from '@my-emotions/types'
 
-import { GET_PROFILE } from 'utils/graphql/gql'
+import { GET_MY_PROFILE } from 'utils/graphql/gql'
 import { handleCommonErr } from 'utils/graphql/handleError'
 import { setUserProfile } from 'utils/persistData'
 
 const LoginCallback = () => {
     const { push } = useHistory()
-    useQuery<{ profile: UserProfileView }>(GET_PROFILE, {
+    useQuery<{ myProfile: UserProfileView }>(GET_MY_PROFILE, {
         onCompleted: (data) => {
-            setUserProfile(data.profile)
+            setUserProfile(data.myProfile)
             push('/')
         },
         onError: (err) =>
