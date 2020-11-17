@@ -13,6 +13,7 @@ export const Wrapper = styled('div')`
 
 export const Content = styled('div')`
     display: flex;
+    flex: 1 auto;
     flex-direction: column;
     font-size: 0.94rem;
     height: 100%;

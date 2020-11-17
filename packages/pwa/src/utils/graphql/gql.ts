@@ -61,3 +61,11 @@ export const GET_EMOTIONS = gql`
         }
     }
 `
+
+export const FORGOT_EMOTION = gql`
+    mutation ForgotEmotion($id: String!) {
+        forgotEmotion(id: $id) {
+            message
+        }
+    }
+`
