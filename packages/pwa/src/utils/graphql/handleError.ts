@@ -7,7 +7,10 @@ import messages from './messages'
 
 export const handleCommonErr = (error: ApolloError, handleMore?: () => void) => {
     if (error.graphQLErrors) {
-        if (error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND_RESOURCE')) {
+        if (
+            error.graphQLErrors.some((err) => err.extensions?.code === 'NOT_FOUND_RESOURCE') ||
+            error.graphQLErrors.some((err) => err.extensions?.exception.response.statusCode === 404)
+        ) {
             // it's better to redirect to /404 notfound page with appropriate image
             window.location.href = '/'
         }
