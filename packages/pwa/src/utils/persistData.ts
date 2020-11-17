@@ -8,9 +8,9 @@ export const setUserProfile = (userProfile: UserProfileView) => {
     localStorage.setItem(IS_LOGGED_IN, 'true')
 }
 
-export const getUserProfile = (): UserProfileView => {
+export const getUserProfile = (): UserProfileView | undefined => {
     const data = localStorage.getItem(USER_PROFILE)
-    return data ? JSON.parse(data) : null
+    return data ? JSON.parse(data) : undefined
 }
 
 export const isLoggedIn = (): boolean => localStorage.getItem(IS_LOGGED_IN) === 'true'
