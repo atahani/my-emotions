@@ -1,14 +1,17 @@
 import styled from 'styled-components'
 
-import { appBarHeightInRem } from 'utils/style/fixedSizes'
 import { white } from 'utils/style/colors'
 
-export const Wrapper = styled('div')`
+interface WrapperProps {
+    heightInRem: number
+}
+
+export const Wrapper = styled('div')<WrapperProps>`
     align-items: center;
     border-bottom: 2px solid #f2464696;
     display: flex;
     flex-direction: row;
-    height: ${appBarHeightInRem}rem;
+    height: ${(props) => `${props.heightInRem}rem`};
     justify-content: space-between;
     padding: 0px 1rem;
     position: fixed;
