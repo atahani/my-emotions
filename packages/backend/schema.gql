@@ -65,7 +65,7 @@ type Query {
 
 type Mutation {
   revoke(appId: String): MutationStatus!
-  releaseEmotion(data: ReleaseEmotionInput!): String!
+  releaseEmotion(data: ReleaseEmotionInput!): EmotionView!
   forgotEmotion(id: String!): ActionStatus!
 }
 

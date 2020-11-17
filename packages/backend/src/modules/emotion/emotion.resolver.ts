@@ -13,14 +13,14 @@ import { EmotionService } from './emotion.service'
 export class EmotionResolver {
     constructor(private readonly emotionService: EmotionService) {}
 
-    @Mutation(() => String)
+    @Mutation(() => EmotionView)
     @UseGuards(EmotionAuthGuard)
     async releaseEmotion(
         @CurrentUserId() userId: string,
         @Args('data') { text, emoji }: ReleaseEmotionInput,
-    ): Promise<string> {
+    ): Promise<EmotionView> {
         const emotion = await this.emotionService.create(userId, text, emoji)
-        return emotion.id
+        return await this.emotionService.getEmotion(emotion.id)
     }
 
     @Mutation(() => ActionStatus)
