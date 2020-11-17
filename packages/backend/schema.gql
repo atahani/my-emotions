@@ -59,7 +59,8 @@ type Query {
   apps: [UserApp!]!
   emotions(itemPerPage: Int = 10, page: Int = 1, userId: String): PaginatedEmotionView!
   emotion(id: String!): EmotionView!
-  profile: UserProfileView!
+  myProfile: UserProfileView!
+  profile(userId: String!): UserProfileView!
 }
 
 type Mutation {
