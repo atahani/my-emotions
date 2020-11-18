@@ -1,7 +1,13 @@
-export const serverGraphqlUri = process.env['REACT_APP_SERVER_GRAPHQL_URI']
+export const httpServerGraphqlUri = process.env['REACT_APP_SERVER_GRAPHQL_URI_HTTP']
 
-if (!serverGraphqlUri || serverGraphqlUri === '') {
-    throw Error('Please set REACT_APP_SERVER_GRAPHQL_URI environment variable')
+if (!httpServerGraphqlUri || httpServerGraphqlUri === '') {
+    throw Error('Please set REACT_APP_SERVER_GRAPHQL_URI_HTTP environment variable')
+}
+
+export const wsServerGraphqlUri = process.env['REACT_APP_SERVER_GRAPHQL_URI_WS']
+
+if (!wsServerGraphqlUri || wsServerGraphqlUri === '') {
+    throw new Error('Please set REACT_APP_SERVER_GRAPHQL_URI_WS environment variable')
 }
 
 export const googleSignInUri = process.env['REACT_APP_GOOGLE_SIGN_IN_URI']

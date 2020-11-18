@@ -79,3 +79,18 @@ export const FORGOT_EMOTION = gql`
         }
     }
 `
+export const NEW_EMOTION = gql`
+    subscription {
+        newEmotion {
+            id
+            text
+            emoji
+            createdAt
+            userBriefProfileView {
+                id
+                displayName
+                imageURL
+            }
+        }
+    }
+`

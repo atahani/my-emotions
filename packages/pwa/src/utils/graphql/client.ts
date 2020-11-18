@@ -1,7 +1,9 @@
-import { ApolloClient, InMemoryCache } from '@apollo/react-hooks'
-import { HttpLink } from '@apollo/client'
+import { ApolloClient, split, HttpLink, InMemoryCache } from '@apollo/react-hooks'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { WebSocketLink } from '@apollo/client/link/ws'
 
-import { serverGraphqlUri } from 'utils/env'
+import { httpServerGraphqlUri, wsServerGraphqlUri } from 'utils/env'
 
 const cache = new InMemoryCache({
     typePolicies: {
@@ -21,7 +23,19 @@ const cache = new InMemoryCache({
     },
 })
 
+const httpLink = new HttpLink({ uri: httpServerGraphqlUri, credentials: 'include' })
+const wsLink = new WebSocketLink(new SubscriptionClient(wsServerGraphqlUri || '', { reconnect: true }))
+
+const splitLink = split(
+    ({ query }) => {
+        const definition = getMainDefinition(query)
+        return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+    },
+    wsLink as any,
+    httpLink,
+)
+
 export const apolloClient = new ApolloClient({
-    link: new HttpLink({ uri: serverGraphqlUri, credentials: 'include' }),
+    link: splitLink,
     cache,
 })

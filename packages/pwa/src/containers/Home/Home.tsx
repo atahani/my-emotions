@@ -6,6 +6,7 @@ import { isLoggedIn } from 'utils/persistData'
 import AppBar from 'components/AppBar'
 import EmojiButton from 'components/EmojiButton'
 import EmotionList from 'components/EmotionList'
+import NewEmotionIndicator from 'components/NewEmotionIndicator'
 import ProfileLinkButton from 'components/ProfileLinkButton'
 
 import { Logo, Content } from './styles'
@@ -28,6 +29,7 @@ const Home: React.FC = () => (
             }
         />
         <Content>
+            <NewEmotionIndicator />
             <EmotionList />
         </Content>
     </>
