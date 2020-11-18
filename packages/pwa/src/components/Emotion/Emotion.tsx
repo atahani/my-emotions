@@ -5,6 +5,7 @@ import React, { useCallback } from 'react'
 import { ActionStatus, EmotionView } from '@my-emotions/types'
 
 import { FORGOT_EMOTION } from 'utils/graphql/gql'
+import { getUserProfile } from 'utils/persistData'
 import { handleCommonErr } from 'utils/graphql/handleError'
 
 import AvatarWithEmotion from 'components/AvatarWithEmotion'
@@ -17,6 +18,7 @@ type Props = {
 }
 
 const Emotion: React.FC<Props> = ({ data }) => {
+    const loggedInProfile = getUserProfile()
     const [forgotEmotion] = useMutation<{ forgotEmotion: ActionStatus }, { id: string }>(FORGOT_EMOTION, {
         onCompleted: ({ forgotEmotion }) => {
             toast.success(forgotEmotion.message)
@@ -55,7 +57,9 @@ const Emotion: React.FC<Props> = ({ data }) => {
                 </Header>
                 <Text>{data.text}</Text>
             </Content>
-            <EmojiButton emoji="🙅‍♂️" onClick={handleDelete} />
+            {loggedInProfile && loggedInProfile.id === data.userBriefProfileView.id && (
+                <EmojiButton emoji="🙅‍♂️" onClick={handleDelete} />
+            )}
         </Wrapper>
     )
 }
