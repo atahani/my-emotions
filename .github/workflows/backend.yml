@@ -1,0 +1,26 @@
+name: My Emotions BackEnd CI
+
+on:
+    push:
+        paths:
+            - 'packages/backend/**'
+            - 'docker/backend/Dockerfile'
+            - '.github/workflows/backend.yml'
+            - '!README.md'
+
+jobs:
+    build_and_push_docker:
+        runs-on: ubuntu-18.04
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Build My Emotions BackEnd Image
+              run: docker build -t atahani/my-emotions-backend -f docker/backend/Dockerfile .
+            - name: Login to DockerHub
+              uses: docker/login-action@v1
+              with:
+                  username: atahani
+                  password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+            - name: Push Image To docker hub
+              run: docker push atahani/my-emotions-backend
