@@ -19,6 +19,7 @@ import { UserModule } from './user/user.module'
                     {
                         autoSchemaFile: 'schema.gql',
                         playground: true,
+                        introspection: true,
                         installSubscriptionHandlers: true,
                         context: ({ req, res, connection }) => ({ req, res, connection }),
                         subscriptions: {
@@ -31,7 +32,7 @@ import { UserModule } from './user/user.module'
                                 )
                             },
                         },
-                        cors: { credentials: true, origin: config.get('client.pwaEndpoint') },
+                        cors: { credentials: true, origin: config.get('client.pwaEndpoint').toString().split(',') },
                     },
                     config.get('graphql'),
                 )
