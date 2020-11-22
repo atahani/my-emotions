@@ -4,7 +4,7 @@
     "description": "My Emotion PWA",
     "license": "MIT",
     "dependencies": {
-        "@apollo/client": "^3.2.6",
+        "@apollo/client": "^3.2.7",
         "@apollo/react-hooks": "^4.0.0",
         "@my-emotions/types": "^0.0.1",
         "@testing-library/jest-dom": "^4.2.4",

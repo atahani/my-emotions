@@ -73,10 +73,10 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
-"@apollo/client@^3.2.6":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.2.6.tgz#ab59d1a234a326a8e66293793952d85744921c92"
-  integrity sha512-JSwIhQzjdM9K8QLjbPsx0Eg4OoECpNrN3qavqJpw1ccg//yWim5yvqT8tUc3YVEuRq8tV5O8OEhCiBu3t+p2Cg==
+"@apollo/client@^3.2.7":
+  version "3.2.7"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.2.7.tgz#1cae8d2f5e15c5d2135a288a9d18962e60c5194c"
+  integrity sha512-4G80jvBLqenCFUhwkHAAHi2ox6Ygq35BkE38yxammqykZm6KE3tVlcEKGOZi0jpiuGJPC6LIQ0d1gtI8ADPtmg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.0.0"
     "@types/zen-observable" "^0.8.0"
@@ -87,7 +87,7 @@
     hoist-non-react-statics "^3.3.2"
     optimism "^0.13.0"
     prop-types "^15.7.2"
-    symbol-observable "^3.0.0"
+    symbol-observable "^2.0.0"
     ts-invariant "^0.5.0"
     tslib "^1.10.0"
     zen-observable "^0.8.14"
@@ -16950,11 +16950,6 @@ symbol-observable@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-2.0.1.tgz#ce66c36a04ed0f3056e7293184749a6fdd7063ea"
   integrity sha512-QrfHrrEUMadQCgMijc3YpfA4ncwgqGv58Xgvdu3JZVQB7iY7cAkiqobZEZbaA863jof8AdpR01CPnZ5UWeqZBQ==
-
-symbol-observable@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-3.0.0.tgz#eea8f6478c651018e059044268375c408c15c533"
-  integrity sha512-6tDOXSHiVjuCaasQSWTmHUWn4PuG7qa3+1WT031yTc/swT7+rLiw3GOrFxaH1E3lLP09dH3bVuVDf2gK5rxG3Q==
 
 symbol-tree@^3.2.2, symbol-tree@^3.2.4:
   version "3.2.4"

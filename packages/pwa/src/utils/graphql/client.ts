@@ -1,6 +1,5 @@
 import { ApolloClient, split, HttpLink, InMemoryCache } from '@apollo/react-hooks'
 import { getMainDefinition } from '@apollo/client/utilities'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { WebSocketLink } from '@apollo/client/link/ws'
 
 import { httpServerGraphqlUri, wsServerGraphqlUri } from 'utils/env'
@@ -24,7 +23,7 @@ const cache = new InMemoryCache({
 })
 
 const httpLink = new HttpLink({ uri: httpServerGraphqlUri, credentials: 'include' })
-const wsLink = new WebSocketLink(new SubscriptionClient(wsServerGraphqlUri || '', { reconnect: true }))
+const wsLink = new WebSocketLink({ uri: wsServerGraphqlUri || '', options: { reconnect: true } })
 
 const splitLink = split(
     ({ query }) => {
