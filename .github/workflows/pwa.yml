@@ -43,7 +43,7 @@ jobs:
               working-directory: ./packages/pwa
               env:
                   CI: true
-                  REACT_APP_VERSION: ${GITHUB_SHA::8}
+                  REACT_APP_VERSION: ${{ github.sha }}
                   REACT_APP_GOOGLE_SIGN_IN_URI: ${{ secrets.REACT_APP_GOOGLE_SIGN_IN_URI }}
                   REACT_APP_SERVER_GRAPHQL_URI_HTTP: ${{ secrets.REACT_APP_SERVER_GRAPHQL_URI_HTTP }}
                   REACT_APP_SERVER_GRAPHQL_URI_WS: ${{ secrets.REACT_APP_SERVER_GRAPHQL_URI_WS }}
