@@ -21,7 +21,7 @@ async function bootstrap() {
     })
 
     app.use(CookieParser(config.get('app.cookieSecret')))
-    app.enableCors({ credentials: true, origin: config.get('client.pwaEndpoint').toString().split(',') })
+    app.enableCors({ credentials: true, origin: config.get('client.originEndpoints').toString().split(',') })
 
     app.useGlobalPipes(new ValidationPipe())
 

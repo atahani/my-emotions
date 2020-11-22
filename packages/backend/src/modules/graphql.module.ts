@@ -32,7 +32,7 @@ import { UserModule } from './user/user.module'
                                 )
                             },
                         },
-                        cors: { credentials: true, origin: config.get('client.pwaEndpoint').toString().split(',') },
+                        cors: { credentials: true, origin: config.get('client.originEndpoints').toString().split(',') },
                     },
                     config.get('graphql'),
                 )
