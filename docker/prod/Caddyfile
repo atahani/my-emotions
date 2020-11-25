@@ -1,0 +1,12 @@
+emotions.funnydemo.ir {
+    proxy / pwa:80 {
+
+    }
+}
+
+backend-emotions.funnydemo.ir {
+    proxy / backend:5050 {
+        websocket
+        transparent
+    }
+}

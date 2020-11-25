@@ -1,0 +1,42 @@
+version: '3.6'
+services:
+    redis:
+        container_name: redis_my_emotions
+        image: redis
+        restart: always
+    postgres:
+        container_name: postgres_my_emotions
+        image: postgis/postgis:9.5-2.5-alpine
+        restart: always
+        env_file:
+            - common.env
+        volumes:
+            - $PWD/pg:/var/lib/postgresql/data
+    backend:
+        container_name: backend_my_emotions
+        image: atahani/my-emotions-backend
+        restart: always
+        depends_on:
+            - 'postgres'
+            - 'redis'
+        env_file:
+            - common.env
+        environment:
+            POSTGRES_HOST: postgres
+    pwa:
+        container_name: pwa_my_emotions
+        image: atahani/my-emotions-pwa
+        restart: always
+    caddy:
+        container_name: caddy_my_emotions
+        image: abiosoft/caddy:1.0.3
+        restart: always
+        ports:
+            - '80:80'
+            - '443:443'
+        depends_on:
+            - 'backend'
+            - 'pwa'
+        volumes:
+            - ./Caddyfile:/etc/Caddyfile
+            - $PWD/caddy_certs:/root/.caddy
