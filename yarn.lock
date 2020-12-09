@@ -3795,6 +3795,11 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
+"@types/javascript-time-ago@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/javascript-time-ago/-/javascript-time-ago-2.0.1.tgz#819ec39b467409e2fd6acb42bc53ae7d631bbdb0"
+  integrity sha512-6QWXsuqzfUMfsg1DTJan/MfUi80LGS1TOohSqxlgpBZEHH344xpl3LzgANTp7PPWf7Z/9S0l14RMQPF0vH7MIg==
+
 "@types/jest@26.x":
   version "26.0.9"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.9.tgz#0543b57da5f0cd949c5f423a00c56c492289c989"
@@ -10753,6 +10758,13 @@ iterare@1.2.1:
   resolved "https://registry.yarnpkg.com/iterare/-/iterare-1.2.1.tgz#139c400ff7363690e33abffa33cbba8920f00042"
   integrity sha512-RKYVTCjAnRthyJes037NX/IiqeidgN1xc3j1RjFfECFp28A1GVwK9nA+i0rJPaHqSZwygLzRnFlzUuHFoWWy+Q==
 
+javascript-time-ago@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/javascript-time-ago/-/javascript-time-ago-2.3.3.tgz#eb438bf159cc919b4123881241314fc962aae3f7"
+  integrity sha512-T4aOCWRQPWv5wsOBiiktKxu1Zd0deIHK2ymKg8XO+MEFZKnZklBOHCXrKbEWPD2Qk2V+ekfmX976r+W1+3dWsw==
+  dependencies:
+    relative-time-format "^1.0.5"
+
 jest-changed-files@^24.9.0:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-24.9.0.tgz#08d8c15eb79a7fa3fc98269bc14b451ee82f8039"
@@ -15174,6 +15186,15 @@ react-scripts@3.4.3:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-time-ago@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/react-time-ago/-/react-time-ago-6.2.1.tgz#a4fb752fd7252ee782df073fd21f7c9529245342"
+  integrity sha512-FFa2CiacBZIvaR2v/UrQaj521UeX5hbJR/K1q5npEBjmvyMxJeo3zf0XYLry8mCQbtkQ0t5LCqvDxyBdXciupQ==
+  dependencies:
+    javascript-time-ago "^2.3.3"
+    prop-types "^15.7.2"
+    raf "^3.4.1"
+
 react-toastify@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-6.0.9.tgz#2a65e5ad9e05f3ee47664cbc69441498b9d694ce"
@@ -15528,6 +15549,11 @@ relateurl@^0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
+
+relative-time-format@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/relative-time-format/-/relative-time-format-1.0.5.tgz#3fb7c76ae39156afe0a3a7ff0cb7bf30aa0f0fb6"
+  integrity sha512-MAgx/YKcUQYJpIaWcfetPstElnWf26JxVis4PirdwVrrymFdbxyCSm6yENpfB1YuwFbtHSHksN3aBajVNxk10Q==
 
 relay-compiler@10.0.1:
   version "10.0.1"

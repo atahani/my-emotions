@@ -22,6 +22,7 @@
         "react-infinite-scroll-component": "^5.1.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "3.4.3",
+        "react-time-ago": "^6.2.1",
         "react-toastify": "^6.0.9",
         "styled-components": "^5.2.0",
         "subscriptions-transport-ws": "^0.9.18",
@@ -54,6 +55,7 @@
     },
     "devDependencies": {
         "@types/emoji-mart": "^3.0.2",
+        "@types/javascript-time-ago": "^2.0.1",
         "@types/react-router-dom": "^5.1.5",
         "@types/styled-components": "^5.1.3"
     }

@@ -22,8 +22,17 @@ export const Content = styled('div')`
 `
 
 export const Header = styled('div')`
+    align-items: center;
+    display: flex;
+    flex-direction: row;
     margin-bottom: 0.5rem;
     margin-top: 0.7rem;
+    time {
+        color: #0e0e0e;
+        font-size: 0.85rem;
+        font-weight: 400;
+        margin-left: 0.8rem;
+    }
 `
 
 export const DisplayName = styled(Link)`

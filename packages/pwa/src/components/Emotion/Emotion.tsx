@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useMutation, Reference } from '@apollo/react-hooks'
 import React, { useCallback } from 'react'
+import ReactTimeAgo from 'react-time-ago'
 
 import { ActionStatus, EmotionView } from '@my-emotions/types'
 
@@ -54,6 +55,7 @@ const Emotion: React.FC<Props> = ({ data }) => {
                     <DisplayName to={`/users/${data.userBriefProfileView.id}`}>
                         {data.userBriefProfileView.displayName}
                     </DisplayName>
+                    <ReactTimeAgo date={new Date(data.createdAt)} locale="en-US" timeStyle="twitter" />
                 </Header>
                 <Text>{data.text}</Text>
             </Content>
