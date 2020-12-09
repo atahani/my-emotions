@@ -30,10 +30,19 @@ const NewEmotionIndicator: React.FC = () => {
     const handleLoadNewEmotions = useCallback(() => {
         apolloClient.cache.modify({
             fields: {
-                emotions(existing) {
-                    return {
-                        ...existing,
-                        items: [...newEmotions, ...existing.items],
+                emotions(existing, { storeFieldName }) {
+                    if (storeFieldName === `emotions:{}`) {
+                        return {
+                            ...existing,
+                            items: [...newEmotions, ...existing.items],
+                        }
+                    }
+                    if (
+                        newEmotions.some(
+                            (emo) => `emotions:{"userId":"${emo.userBriefProfileView.id}"}` !== storeFieldName,
+                        )
+                    ) {
+                        return existing
                     }
                 },
             },
