@@ -13,7 +13,7 @@ type Props = {
 const AvatarWithEmotion: React.FC<Props> = ({ name = '', url, emoji }) => (
     <Wrapper>
         <Avatar url={url} name={name} />
-        <Emoji value={emoji} size={24} />
+        <Emoji value={emoji} size={28} />
     </Wrapper>
 )
 
