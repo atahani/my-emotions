@@ -25,6 +25,7 @@ export const Content = styled('div')`
 export const Form = styled('form')`
     display: flex;
     flex-direction: column;
+    padding: 0 0.8rem;
     width: 100%;
 `
 
@@ -35,7 +36,6 @@ export const NewEmotionTXT = styled('textarea')`
     outline: none;
     padding: 0.8rem;
     resize: none;
-    width: 100%;
 `
 
 export const FullWidthSubmit = styled('button')`
