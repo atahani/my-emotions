@@ -49,6 +49,7 @@ const Emotion: React.FC<Props> = ({ data }) => {
                 url={data.userBriefProfileView.imageURL}
                 name={data.userBriefProfileView.displayName}
                 emoji={data.emoji}
+                profilePath={`/users/${data.userBriefProfileView.id}`}
             />
             <Content>
                 <Header>

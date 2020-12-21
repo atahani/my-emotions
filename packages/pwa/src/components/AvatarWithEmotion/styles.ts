@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import EmojiIcon from 'components/EmojiIcon'
 
-export const Wrapper = styled('div')`
+export const ProfileLink = styled(Link)`
     position: relative;
 `
 
