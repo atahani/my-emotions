@@ -80,10 +80,11 @@
             "json",
             "ts"
         ],
+        "moduleDirectories": ["node_modules", "src"],
         "rootDir": "src",
         "testRegex": ".spec.ts$",
         "transform": {
-            "^.+\\.(t|j)s$": "ts-jest"
+            "^.+\\.(t)s$": "ts-jest"
         },
         "collectCoverageFrom": [
             "**/*.(t|j)s"

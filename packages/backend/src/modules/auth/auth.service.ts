@@ -41,8 +41,11 @@ export class AuthService {
         return { id, appId }
     }
 
-    async refreshAccessToken(appId: string, userId: string): Promise<AccessTokenData> {
+    async refreshAccessToken(appId: string, userId: string): Promise<AccessTokenData | undefined> {
         const refreshToken = await this.userAppService.refreshIt(appId, userId)
+        if (!refreshToken) {
+            return undefined
+        }
         const accessToken = generateRandomString(24)
         await this.redisService.setUserToken(appId, userId, accessToken)
         return {

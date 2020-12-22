@@ -23,7 +23,8 @@ export class UserAppService {
         app.refreshedAt = new Date()
         app.thirdPartyAuthenticatorType = authenticatorType
         app.authorizedAt = new Date()
-        app = await this.userAppRepository.create(app).save()
+        app = await this.userAppRepository.create(app)
+        app = await this.userAppRepository.save(app)
         return {
             app,
             clearRefreshToken,
@@ -38,16 +39,19 @@ export class UserAppService {
         return undefined
     }
 
-    async refreshIt(id: string, userId: string): Promise<string> {
+    async refreshIt(id: string, userId: string): Promise<string | undefined> {
         const clearRefreshToken = v4()
         const hashedRefreshToken = await bcrypt.hash(clearRefreshToken, 4)
-        await this.userAppRepository.update(
+        const result = await this.userAppRepository.update(
             { id, userId },
             {
                 refreshToken: hashedRefreshToken,
                 refreshedAt: new Date(),
             },
         )
+        if (result.affected === 0) {
+            return undefined
+        }
         return clearRefreshToken
     }
 
