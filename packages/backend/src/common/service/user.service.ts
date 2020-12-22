@@ -25,7 +25,8 @@ export class UserService {
                 providerType: data.thirdPartyAuthenticatorType,
             },
         ]
-        u = await this.userRepository.create(u).save()
+        u = await this.userRepository.create(u)
+        u = await this.userRepository.save(u)
         return u
     }
 
