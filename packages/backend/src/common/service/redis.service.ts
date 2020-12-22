@@ -13,7 +13,7 @@ export class RedisService {
         this.tokenExpiresInMin = config.get('auth.tokenExpiresInMin')
     }
 
-    _accessTokenKey(appId: string, token: string): string {
+    private _accessTokenKey(appId: string, token: string): string {
         return `${this.USER_PREFIX}:${appId}:access_token:${token}`
     }
 
