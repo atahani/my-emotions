@@ -21,11 +21,13 @@ export class EmotionService {
     }
 
     async create(userId: string, text: string, emoji: string): Promise<Emotion> {
-        const em = new Emotion()
+        let em = new Emotion()
         em.userId = userId
         em.text = text
         em.emoji = emoji
-        return await this.emotionRepository.create(em).save()
+        em = await this.emotionRepository.create(em)
+        em = await this.emotionRepository.save(em)
+        return em
     }
 
     async delete(id: string, userId: string): Promise<boolean> {
