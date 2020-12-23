@@ -3,7 +3,6 @@ import { PoolClient, QueryResult } from 'pg'
 import Emittery from 'emittery'
 
 import { globalPGPool } from 'common/utils'
-import { EmotionView } from '@my-emotions/types'
 
 @Injectable()
 export class PostgresListenerService {
@@ -18,7 +17,7 @@ export class PostgresListenerService {
         })()
     }
 
-    async initialized() {
+    private async initialized() {
         this.client = await globalPGPool.connect()
         this.client.on('notification', (message) => {
             const payload = JSON.parse(message.payload)
@@ -42,7 +41,7 @@ export class PostgresListenerService {
             this.channelList.push(name)
         }
         try {
-            return await this.client.query('LISTEN new_emotion')
+            return await this.client.query('LISTEN $1', [name])
         } catch (error) {
             this.pgEventEmittery.emit(
                 'error',
