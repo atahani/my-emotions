@@ -18,7 +18,8 @@
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test:e2e": "POSTGRES_DB=my_emotions_test jest --config jest.e2e.config.json --runInBand",
+        "test:e2e:watch": "POSTGRES_DB=my_emotions_test jest --config jest.e2e.config.json --runInBand --watch"
     },
     "dependencies": {
         "@my-emotions/types": "^0.0.1",
@@ -34,6 +35,7 @@
         "cookie-parser": "^1.4.5",
         "emittery": "^0.7.1",
         "graphql": "^15.3.0",
+        "graphql-request": "^3.4.0",
         "graphql-tools": "^6.0.18",
         "ioredis": "^4.17.3",
         "nest-raven": "^6.0.0-alpha.2",
@@ -80,7 +82,10 @@
             "json",
             "ts"
         ],
-        "moduleDirectories": ["node_modules", "src"],
+        "moduleDirectories": [
+            "node_modules",
+            "src"
+        ],
         "rootDir": "src",
         "testRegex": ".spec.ts$",
         "transform": {
