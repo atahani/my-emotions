@@ -73,7 +73,7 @@ describe('PostgresListenerService', () => {
         it('should call query fn of client to LISTEN to the new notification on PG', async () => {
             const querySpy = jest.spyOn(service['client'], 'query')
             await service.addChannel('new_emotion')
-            expect(querySpy).toBeCalledWith('LISTEN $1', ['new_emotion'])
+            expect(querySpy).toBeCalledWith('LISTEN new_emotion')
         })
 
         it('should emit error while some error happened', async () => {
@@ -93,7 +93,7 @@ describe('PostgresListenerService', () => {
         it('should call query fn of client to unlisten to the notification', async () => {
             const querySpy = jest.spyOn(service['client'], 'query')
             await service.removeChannel('new_emotion')
-            expect(querySpy).toBeCalledWith(`UNLISTEN $1`, ['new_emotion'])
+            expect(querySpy).toBeCalledWith('UNLISTEN new_emotion')
         })
 
         it('should emit error while some error happened', async () => {

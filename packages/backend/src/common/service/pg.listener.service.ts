@@ -51,7 +51,7 @@ export class PostgresListenerService {
             this.channelList.push(name)
         }
         try {
-            return await this.client.query('LISTEN $1', [name])
+            return await this.client.query(`LISTEN ${name}`)
         } catch (error) {
             this.pgEventEmittery.emit(
                 'error',
@@ -66,7 +66,7 @@ export class PostgresListenerService {
             this.channelList.slice(index, 1)
         }
         try {
-            return await this.client.query(`UNLISTEN $1`, [name])
+            return await this.client.query(`UNLISTEN ${name}`)
         } catch (error) {
             this.pgEventEmittery.emit('error', new Error(`failed to stop listening to ${name} channel.`))
         }
