@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
-import { GqlExecutionContext, GqlContextType } from '@nestjs/graphql'
+import { GqlExecutionContext } from '@nestjs/graphql'
 import { Response as ExpressResponse } from 'express'
 
 import { CustomRequest } from 'common/types'
@@ -10,6 +10,7 @@ import { getDefaultCookieOptions } from 'common/options'
 
 @Injectable()
 export class EmotionAuthGuard implements CanActivate {
+    private readonly inTestingMode = process.env.NODE_ENV === 'test'
     constructor(private readonly authService: AuthService) {}
 
     async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -22,9 +23,14 @@ export class EmotionAuthGuard implements CanActivate {
         }>()
         const req = graphqlReq ? graphqlReq : connection.context.req
 
-        const refreshToken = req.cookies[COOKIE_REFRESH_TOKEN]
-        const appId = req.cookies[COOKIE_APP_ID]
-        const token = req.cookies[COOKIE_ACCESS_TOKEN]
+        if (!req.cookies && !this.inTestingMode) {
+            return false
+        }
+
+        const refreshToken = this.inTestingMode ? req.headers[COOKIE_REFRESH_TOKEN] : req.cookies[COOKIE_REFRESH_TOKEN]
+        const appId = this.inTestingMode ? req.headers[COOKIE_APP_ID] : req.cookies[COOKIE_APP_ID]
+        const token = this.inTestingMode ? req.headers[COOKIE_ACCESS_TOKEN] : req.cookies[COOKIE_ACCESS_TOKEN]
+
         if (!token || !appId) {
             return false
         }
