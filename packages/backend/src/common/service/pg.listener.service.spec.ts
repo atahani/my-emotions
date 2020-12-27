@@ -1,15 +1,17 @@
+import { ConfigService } from 'nestjs-config'
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { PostgresListenerService } from './pg.listener.service'
 
-jest.mock('common/utils', () => ({
-    globalPGPool: {
+jest.mock('pg', () => ({
+    Pool: jest.fn().mockImplementation(() => ({
         connect: async () => ({
             on: jest.fn(),
             release: jest.fn(),
             query: jest.fn(),
         }),
-    },
+        end: jest.fn(),
+    })),
 }))
 
 describe('PostgresListenerService', () => {
@@ -17,7 +19,15 @@ describe('PostgresListenerService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PostgresListenerService],
+            providers: [
+                PostgresListenerService,
+                {
+                    provide: ConfigService,
+                    useValue: {
+                        get: (key: string) => key,
+                    },
+                },
+            ],
         }).compile()
 
         service = module.get<PostgresListenerService>(PostgresListenerService)

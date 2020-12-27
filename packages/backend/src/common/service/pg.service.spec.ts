@@ -1,15 +1,18 @@
+import { ConfigService } from 'nestjs-config'
 import { QueryResult } from 'pg'
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { PostgresService } from './pg.service'
 
-jest.mock('common/utils', () => ({
-    globalPGPool: {
+jest.mock('pg', () => ({
+    Pool: jest.fn().mockImplementation(() => ({
         connect: async () => ({
+            on: jest.fn(),
             release: jest.fn(),
             query: jest.fn(),
         }),
-    },
+        end: jest.fn(),
+    })),
 }))
 
 describe('PostgresService', () => {
@@ -17,7 +20,15 @@ describe('PostgresService', () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            providers: [PostgresService],
+            providers: [
+                PostgresService,
+                {
+                    provide: ConfigService,
+                    useValue: {
+                        get: (key: string) => key,
+                    },
+                },
+            ],
         }).compile()
         service = module.get<PostgresService>(PostgresService)
     })

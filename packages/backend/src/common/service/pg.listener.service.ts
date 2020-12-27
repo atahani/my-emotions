@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common'
-import { PoolClient, QueryResult } from 'pg'
+import { Pool, PoolClient, QueryResult } from 'pg'
 import Emittery from 'emittery'
 
-import { globalPGPool } from 'common/utils'
+import { ConfigService, InjectConfig } from 'nestjs-config'
 
 @Injectable()
 export class PostgresListenerService {
     private readonly pgEventEmittery: Emittery = new Emittery()
     private client: PoolClient
+    private pgPool: Pool
     private channelList: string[] = []
 
-    constructor() {
+    constructor(@InjectConfig() config: ConfigService) {
+        this.pgPool = new Pool({
+            host: config.get('pg.host'),
+            password: config.get('pg.password'),
+            user: config.get('pg.username'),
+            port: config.get('pg.port'),
+            database: config.get('pg.database'),
+            max: 400,
+        })
         ;(async () => {
             await this.initialized()
             return this
@@ -18,7 +27,7 @@ export class PostgresListenerService {
     }
 
     private async initialized() {
-        this.client = await globalPGPool.connect()
+        this.client = await this.pgPool.connect()
         this.client.on('notification', (message) => {
             const payload = JSON.parse(message.payload)
             this.pgEventEmittery.emit(message.channel, payload)
@@ -34,6 +43,7 @@ export class PostgresListenerService {
 
     async end() {
         await this.client.release()
+        await this.pgPool.end()
     }
 
     async addChannel(name: string): Promise<QueryResult> {

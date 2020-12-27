@@ -1,11 +1,7 @@
-import * as fs from 'fs'
-import * as path from 'path'
-
-import { Client, Pool } from 'pg'
+import { Client } from 'pg'
 
 import pg from 'config/pg'
-
-const currentPath = path.resolve(process.cwd(), 'sql/')
+import { TESTING_DATABASE_NAME } from 'common/constants'
 
 const clientConfig = {
     host: pg.host,
@@ -13,16 +9,6 @@ const clientConfig = {
     port: pg.port,
     user: pg.username,
 }
-
-export const getPGClient = (): Client => {
-    return new Client(Object.assign({}, clientConfig, { database: pg.database }))
-}
-
-export const globalPGPool = new Pool({
-    ...clientConfig,
-    database: pg.database,
-    max: 400,
-})
 
 export const createDBIfNotExist = async (databaseName = pg.database): Promise<void> => {
     const client = new Client(clientConfig)
@@ -38,26 +24,21 @@ export const createDBIfNotExist = async (databaseName = pg.database): Promise<vo
     await client.end()
 }
 
-const sqlFiles = [
-    'index/m_user_providers_gin_idx.index.sql',
-    'view/emotion_view.view.sql',
-    'func/notify_new_emotion.func.sql',
-    'trigger/notify_new_emotion.trigger.sql',
-]
+export const dropIfExistAndCreateDBInTestingMode = async (
+    databaseName: string = TESTING_DATABASE_NAME,
+): Promise<void> => {
+    const client = new Client(clientConfig)
 
-export const runSQLFiles = async (): Promise<void> => {
-    const client = getPGClient()
     await client.connect()
-    console.warn('START - Run SQL Files')
-    for (let i = 0; i < sqlFiles.length; i++) {
-        try {
-            const sql = fs.readFileSync(path.resolve(currentPath, sqlFiles[i])).toString()
-            await client.query(sql)
-            console.log(`${sqlFiles[i]} sql file successfully executed.`)
-        } catch (err) {
-            console.warn(`Something wrong while reading and running ${sqlFiles[i]}\n`, err)
-        }
+
+    const res = await client.query<{ exists: boolean }>(
+        `SELECT EXISTS(SELECT datname FROM pg_catalog.pg_database WHERE datname = '${databaseName}')`,
+    )
+    if (res.rows[0].exists) {
+        await client.query(`DROP DATABASE "${databaseName}"`)
+        await client.query(`CREATE DATABASE "${databaseName}"`)
+    } else {
+        await client.query(`CREATE DATABASE "${databaseName}"`)
     }
-    console.warn('END - Run SQL Files')
     await client.end()
 }

@@ -1,15 +1,16 @@
 import { ConfigService } from 'nestjs-config'
-import { createDBIfNotExist, runSQLFiles } from 'common/utils'
+import { createDBIfNotExist } from 'common/utils'
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import * as Sentry from '@sentry/node'
 import CookieParser from 'cookie-parser'
 
 import { AppModule } from 'modules'
+import { PostgresService } from 'common/service/pg.service'
 
 async function bootstrap() {
     await createDBIfNotExist()
-    await runSQLFiles()
+
     const app = await NestFactory.create(AppModule)
     const config = app.get(ConfigService)
 
@@ -27,7 +28,8 @@ async function bootstrap() {
 
     await app.init()
 
-    await app.listen(config.get('app.port'), () => {
+    await app.listen(config.get('app.port'), async () => {
+        await app.get<PostgresService>(PostgresService).runSQLFiles()
         console.warn(`The Global is available on ${config.get('app.graphqlEndpoint')}`)
     })
 }

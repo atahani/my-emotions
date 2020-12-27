@@ -24,4 +24,8 @@ export class RedisService {
     async getUserId(appId: string, token: string): Promise<string | undefined> {
         return await this.redis.get(this._accessTokenKey(appId, token))
     }
+
+    disconnect(): void {
+        this.redis.disconnect()
+    }
 }
