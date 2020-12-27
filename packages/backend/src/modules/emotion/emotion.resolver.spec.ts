@@ -35,14 +35,12 @@ describe('EmotionResolver', () => {
                         create: jest.fn().mockResolvedValue(emotion),
                         getEmotion: jest.fn().mockResolvedValue(emotion),
                         delete: jest.fn().mockResolvedValue(true),
-                        getEmotions: jest
-                            .fn()
-                            .mockResolvedValue({
-                                page: 1,
-                                totalPage: 1,
-                                totalItems: 2,
-                                items: [emotion, emotion],
-                            } as PaginatedResponse<EmotionView>),
+                        getEmotions: jest.fn().mockResolvedValue({
+                            page: 1,
+                            totalPage: 1,
+                            totalItems: 2,
+                            items: [emotion, emotion],
+                        } as PaginatedResponse<EmotionView>),
                         notifyNewEmotion: jest.fn(),
                     },
                 },

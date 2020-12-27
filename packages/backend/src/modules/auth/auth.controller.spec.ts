@@ -42,13 +42,11 @@ describe('AuthController', () => {
                 {
                     provide: AuthService,
                     useValue: {
-                        getAccessToken: jest
-                            .fn()
-                            .mockResolvedValue({
-                                accessToken: 'accessToken',
-                                appId: 'appId',
-                                refreshToken: 'refreshToken',
-                            } as AccessTokenData),
+                        getAccessToken: jest.fn().mockResolvedValue({
+                            accessToken: 'accessToken',
+                            appId: 'appId',
+                            refreshToken: 'refreshToken',
+                        } as AccessTokenData),
                     },
                 },
             ],
