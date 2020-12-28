@@ -11,6 +11,29 @@ on:
 jobs:
     build_and_test:
         runs-on: ubuntu-18.04
+        services:
+            postgres:
+                image: postgis/postgis:9.5-2.5-alpine
+                env:
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_USER: postgres
+                    POSTGRES_DB: my_emotions_test
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+            redis:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 6379:6379
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v2
@@ -35,11 +58,18 @@ jobs:
             - name: Install Dependencies on The Root
               run: yarn install
 
-            - name: Test & Build PWA
+            - name: Unit Tests
               working-directory: ./packages/backend
               env:
                   CI: true
               run: yarn run test
+
+            - name: e2e Tests
+              working-directory: ./packages/backend
+              env:
+                  CI: true
+                  POSTGRES_DB: my_emotions_test
+              run: yarn run test:e2e --no-cache
 
     build_and_push_docker:
         runs-on: ubuntu-18.04
