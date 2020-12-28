@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import gql from 'graphql-tag'
 
 export const GET_APPS = gql`
     {
@@ -94,6 +94,22 @@ export const GET_EMOTIONS = gql`
                     displayName
                     imageURL
                 }
+            }
+        }
+    }
+`
+
+export const NEW_EMOTION = gql`
+    subscription {
+        newEmotion {
+            id
+            text
+            emoji
+            createdAt
+            userBriefProfileView {
+                id
+                displayName
+                imageURL
             }
         }
     }

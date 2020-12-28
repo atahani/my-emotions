@@ -29,6 +29,9 @@
         "@nestjs/platform-express": "^7.1.1",
         "@nestjs/typeorm": "^7.1.0",
         "@sentry/node": "5.20.1",
+        "apollo-cache-inmemory": "^1.6.6",
+        "apollo-client": "^2.6.10",
+        "apollo-link-ws": "^1.0.20",
         "apollo-server-express": "^2.16.1",
         "bcryptjs": "^2.4.3",
         "class-transformer": "^0.3.1",
@@ -36,6 +39,7 @@
         "emittery": "^0.7.1",
         "graphql": "^15.3.0",
         "graphql-request": "^3.4.0",
+        "graphql-tag": "^2.11.0",
         "graphql-tools": "^6.0.18",
         "ioredis": "^4.17.3",
         "nest-raven": "^6.0.0-alpha.2",
@@ -46,7 +50,9 @@
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^6.5.5",
-        "uuid": "^8.3.0"
+        "subscriptions-transport-ws": "^0.9.18",
+        "uuid": "^8.3.0",
+        "ws": "^7.4.1"
     },
     "devDependencies": {
         "@nestjs/cli": "^7.2.0",

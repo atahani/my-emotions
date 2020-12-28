@@ -1,16 +1,22 @@
-import { ActionStatus, EmotionView, PaginatedResponse, ReleaseEmotionInput, User } from '@my-emotions/types'
+import { ConfigService } from 'nestjs-config'
+import { FORGOT_EMOTION, GET_EMOTION, GET_EMOTIONS, RELEASE_EMOTION, NEW_EMOTION } from 'common/utils/test.gql.utils'
+import { GraphQLClient } from 'graphql-request'
 import { INestApplication } from '@nestjs/common'
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
 import { Test, TestingModule } from '@nestjs/testing'
+import { v4 } from 'uuid'
+import { WebSocketLink } from 'apollo-link-ws'
+import ApolloClient from 'apollo-client'
+import ws from 'ws'
+
+import { ActionStatus, EmotionView, PaginatedResponse, ReleaseEmotionInput, User } from '@my-emotions/types'
+
+import { AppModule } from 'modules/app.module'
+import { dropIfExistAndCreateDBInTestingMode } from 'common/utils'
 import { PostgresListenerService } from 'common/service/pg.listener.service'
 import { PostgresService } from 'common/service/pg.service'
 import { RedisService } from 'common/service/redis.service'
 import { TestingHelperService } from 'common/service/testingHelper.service'
-import { dropIfExistAndCreateDBInTestingMode } from 'common/utils'
-import { FORGOT_EMOTION, GET_EMOTION, GET_EMOTIONS, RELEASE_EMOTION } from 'common/utils/test.gql.utils'
-import { GraphQLClient } from 'graphql-request'
-import { AppModule } from 'modules/app.module'
-import { ConfigService } from 'nestjs-config'
-import { v4 } from 'uuid'
 
 describe('Emotion Module (e2e)', () => {
     const releaseEmotionInput = { text: 'I love e2e testing.', emoji: '😇' } as ReleaseEmotionInput
@@ -20,6 +26,8 @@ describe('Emotion Module (e2e)', () => {
     let redisService: RedisService
     let testingHelperService: TestingHelperService
     let graphQLClient: GraphQLClient
+    let apolloClient: ApolloClient<NormalizedCacheObject>
+    let wsLink: WebSocketLink
     let testUser: User
 
     beforeAll(async () => {
@@ -43,6 +51,17 @@ describe('Emotion Module (e2e)', () => {
 
         graphQLClient = new GraphQLClient(`http://127.0.0.1:${configService.get('app.port')}/graphql`)
 
+        wsLink = new WebSocketLink({
+            uri: `ws://127.0.0.1:${configService.get('app.port')}/graphql`,
+            options: { reconnect: true, lazy: true },
+            webSocketImpl: ws,
+        })
+
+        apolloClient = new ApolloClient({
+            link: wsLink,
+            cache: new InMemoryCache({ addTypename: false }),
+        })
+
         testUser = await testingHelperService.registerTestUser()
     })
 
@@ -52,6 +71,9 @@ describe('Emotion Module (e2e)', () => {
     })
 
     afterAll(async () => {
+        await apolloClient.clearStore()
+        apolloClient.stop()
+        ;(wsLink as any).subscriptionClient.close()
         await Promise.all([redisService.disconnect(), pgListenerService.end(), pgService.end(), app.close()])
     })
 
@@ -145,6 +167,24 @@ describe('Emotion Module (e2e)', () => {
             expect(emotions.page).toBe(1)
             expect(emotions.totalPage).toBe(1)
             expect(emotions.items.length).toBe(emotions.totalItems)
+        })
+    })
+
+    describe('Subscription > newEmotion', () => {
+        it('should get the new emotion when releasing one', async () => {
+            const nextFn = jest.fn()
+            const subscribe = apolloClient
+                .subscribe<{ newEmotion: EmotionView }>({ query: NEW_EMOTION })
+                .subscribe({ next: nextFn })
+            await testingHelperService.loginTestUser()
+            graphQLClient.setHeaders(testingHelperService.getAuthHeaders())
+            const { releaseEmotion } = await graphQLClient.request<
+                { releaseEmotion: EmotionView },
+                { data: ReleaseEmotionInput }
+            >(RELEASE_EMOTION, { data: releaseEmotionInput })
+            subscribe.unsubscribe()
+            expect(nextFn).toBeCalledTimes(1)
+            expect(nextFn).toBeCalledWith({ data: { newEmotion: releaseEmotion } })
         })
     })
 })
