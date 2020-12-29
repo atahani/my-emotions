@@ -4,9 +4,9 @@ import { InjectConfig, ConfigService } from 'nestjs-config'
 import { Response as ExpressResponse } from 'express'
 
 import { CustomRequest } from 'common/types'
-import { ThirdPartyAuthenticatorType, UserAccessData } from '@my-emotions/types'
+import { ThirdPartyAuthenticatorType } from '@my-emotions/types'
 
-import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID, COOKIE_REFRESH_TOKEN } from 'common/constants'
+import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID } from 'common/constants'
 import { SetCookie } from 'common/decorator'
 import { UserService } from 'common/service/user.service'
 
@@ -49,7 +49,6 @@ export class AuthController {
 
         setCookie(COOKIE_ACCESS_TOKEN, tokenData.accessToken)
         setCookie(COOKIE_APP_ID, tokenData.appId)
-        setCookie(COOKIE_REFRESH_TOKEN, tokenData.refreshToken)
 
         res.redirect(
             303,

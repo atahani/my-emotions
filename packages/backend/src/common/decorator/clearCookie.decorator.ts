@@ -7,7 +7,7 @@ import { getDefaultCookieOptions } from 'common/options'
 export type ClearCookie = (name: string, options?: CookieOptions) => void
 
 export const ClearCookie = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
-    return (name: string, options: CookieOptions = getDefaultCookieOptions()) => {
+    return (name: string, options?: CookieOptions) => {
         let res: ExpressResponse
         switch (ctx.getType<GqlContextType>()) {
             case 'graphql':
@@ -20,7 +20,7 @@ export const ClearCookie = createParamDecorator((data: unknown, ctx: ExecutionCo
                 break
         }
         if (res) {
-            res.clearCookie(name, options)
+            res.clearCookie(name, { ...getDefaultCookieOptions(-1), ...options })
         }
     }
 })

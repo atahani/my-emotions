@@ -4,7 +4,7 @@ import { ThirdPartyAuthenticatorType, User } from '@my-emotions/types'
 import { AccessTokenData } from 'common/types'
 
 import { AuthService } from 'modules/auth/auth.service'
-import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID, COOKIE_REFRESH_TOKEN } from 'common/constants'
+import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID } from 'common/constants'
 import { UserAppService } from 'common/service/userApp.service'
 import { UserService } from 'common/service/user.service'
 
@@ -61,7 +61,6 @@ export class TestingHelperService {
         return {
             [COOKIE_ACCESS_TOKEN]: this.currentTestUserAccessTokenData.accessToken,
             [COOKIE_APP_ID]: this.currentTestUserAccessTokenData.appId,
-            [COOKIE_REFRESH_TOKEN]: this.currentTestUserAccessTokenData.refreshToken,
         }
     }
 }

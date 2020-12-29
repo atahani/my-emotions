@@ -3,7 +3,7 @@ import { UseGuards, NotFoundException } from '@nestjs/common'
 
 import { UserApp, MutationStatus } from '@my-emotions/types'
 
-import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID, COOKIE_REFRESH_TOKEN } from 'common/constants'
+import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID } from 'common/constants'
 import { CurrentUserId, CurrentAppId, ClearCookie } from 'common/decorator'
 import { EmotionAuthGuard } from 'common/guard'
 import { UserAppService } from 'common/service/userApp.service'
@@ -33,7 +33,6 @@ export class AuthResolver {
             // so the currentAppId is revoked, should clear cookies
             clearCookie(COOKIE_APP_ID)
             clearCookie(COOKIE_ACCESS_TOKEN)
-            clearCookie(COOKIE_REFRESH_TOKEN)
         }
         return new MutationStatus(true, 'successfully revoked the app.')
     }

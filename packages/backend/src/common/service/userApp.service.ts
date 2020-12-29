@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { v4 } from 'uuid'
 import * as bcrypt from 'bcryptjs'
 
 import { UserApp, ThirdPartyAuthenticatorType } from '@my-emotions/types'
+
+import { generateRandomString } from 'common/utils'
 
 @Injectable()
 export class UserAppService {
@@ -13,46 +14,29 @@ export class UserAppService {
     async create(
         userId: string,
         authenticatorType: ThirdPartyAuthenticatorType = null,
-    ): Promise<{ app: UserApp; clearRefreshToken: string }> {
-        const clearRefreshToken = v4()
+    ): Promise<{ app: UserApp; clearToken: string }> {
+        const clearToken = generateRandomString(18)
 
-        const hashedRefreshToken = await bcrypt.hash(clearRefreshToken, 4)
+        const hashedToken = await bcrypt.hash(clearToken, 4)
         let app = new UserApp()
         app.userId = userId
-        app.refreshToken = hashedRefreshToken
-        app.refreshedAt = new Date()
+        app.token = hashedToken
         app.thirdPartyAuthenticatorType = authenticatorType
         app.authorizedAt = new Date()
         app = await this.userAppRepository.create(app)
         app = await this.userAppRepository.save(app)
         return {
             app,
-            clearRefreshToken,
+            clearToken,
         }
     }
 
-    async getUserIdByRefreshToken(id: string, clearRefreshToken: string): Promise<string | undefined> {
+    async getUserIdByToken(id: string, clearToken: string): Promise<string | undefined> {
         const app = await this.userAppRepository.findOne({ id })
-        if (app && (await bcrypt.compare(clearRefreshToken, app.refreshToken))) {
+        if (app && (await bcrypt.compare(clearToken, app.token))) {
             return app.userId
         }
         return undefined
-    }
-
-    async refreshIt(id: string, userId: string): Promise<string | undefined> {
-        const clearRefreshToken = v4()
-        const hashedRefreshToken = await bcrypt.hash(clearRefreshToken, 4)
-        const result = await this.userAppRepository.update(
-            { id, userId },
-            {
-                refreshToken: hashedRefreshToken,
-                refreshedAt: new Date(),
-            },
-        )
-        if (result.affected === 0) {
-            return undefined
-        }
-        return clearRefreshToken
     }
 
     async getApps(userId: string): Promise<UserApp[]> {

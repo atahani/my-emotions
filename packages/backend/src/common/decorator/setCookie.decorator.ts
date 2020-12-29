@@ -7,7 +7,7 @@ import { getDefaultCookieOptions } from 'common/options'
 export type SetCookie = (name: string, value: string, options?: CookieOptions) => void
 
 export const SetCookie = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
-    return (name: string, value: string, options: CookieOptions = getDefaultCookieOptions()) => {
+    return (name: string, value: string, options?: CookieOptions) => {
         let res: ExpressResponse
         switch (ctx.getType<GqlContextType>()) {
             case 'graphql':

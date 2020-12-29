@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ThirdPartyAuthenticatorType, User } from '@my-emotions/types'
 
 import { AccessTokenData } from 'common/types'
-import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID, COOKIE_REFRESH_TOKEN } from 'common/constants'
+import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID } from 'common/constants'
 import { UserService } from 'common/service/user.service'
 
 import { AuthController } from './auth.controller'
@@ -98,7 +98,6 @@ describe('AuthController', () => {
             expect(getAccessTokenSpy).toBeCalledWith(user, ThirdPartyAuthenticatorType.GOOGLE)
             expect(setCookieFn).toBeCalledWith(COOKIE_ACCESS_TOKEN, 'accessToken')
             expect(setCookieFn).toBeCalledWith(COOKIE_APP_ID, 'appId')
-            expect(setCookieFn).toBeCalledWith(COOKIE_REFRESH_TOKEN, 'refreshToken')
             expect(redirectFn).toBeCalledWith(303, `client.pwaEndpoint/login/callback?userId=userId&appId=appId`)
         })
 
@@ -115,7 +114,7 @@ describe('AuthController', () => {
             )
 
             expect(registerByPassportSpy).toBeCalledTimes(0)
-            expect(setCookieFn).toBeCalledTimes(3)
+            expect(setCookieFn).toBeCalledTimes(2)
             expect(redirectFn).toBeCalledTimes(1)
         })
     })

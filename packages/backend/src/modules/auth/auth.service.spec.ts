@@ -11,8 +11,6 @@ import { AuthService } from './auth.service'
 const USER_ID = 'userId'
 const APP_ID = 'appId'
 const RANDOM_CHAR_AS_ACCESS_TOKEN = 'someRandomCharacterInStringAsAccessToken'
-const CLEAR_REFRESH_TOKEN = 'clearRefreshToken'
-const REFRESH_TOKEN = 'refreshToken'
 
 jest.mock('common/utils', () => ({ generateRandomString: () => RANDOM_CHAR_AS_ACCESS_TOKEN }))
 
@@ -37,9 +35,9 @@ describe('AuthService', () => {
                     useValue: {
                         create: jest
                             .fn()
-                            .mockResolvedValue({ app: { id: APP_ID }, clearRefreshToken: CLEAR_REFRESH_TOKEN }),
-                        getUserIdByRefreshToken: jest.fn().mockResolvedValue('userId'),
-                        refreshIt: jest.fn().mockResolvedValue(CLEAR_REFRESH_TOKEN),
+                            .mockResolvedValue({ app: { id: APP_ID }, clearToken: RANDOM_CHAR_AS_ACCESS_TOKEN }),
+                        getUserIdByToken: jest.fn().mockResolvedValue('userId'),
+                        It: jest.fn().mockResolvedValue(RANDOM_CHAR_AS_ACCESS_TOKEN),
                     },
                 },
             ],
@@ -60,7 +58,6 @@ describe('AuthService', () => {
             const redisSetUserTokenSpy = jest.spyOn(redisService, 'setUserToken')
             expect(await service.getAccessToken({ id: USER_ID } as User)).toStrictEqual({
                 appId: APP_ID,
-                refreshToken: CLEAR_REFRESH_TOKEN,
                 accessToken: RANDOM_CHAR_AS_ACCESS_TOKEN,
             } as AccessTokenData)
             expect(userAppCreateSpy).toBeCalledWith(USER_ID, null)
@@ -77,45 +74,14 @@ describe('AuthService', () => {
             } as TokenValidationResult)
             expect(redisGetUserIdSpy).toBeCalledWith(APP_ID, RANDOM_CHAR_AS_ACCESS_TOKEN)
         })
-
-        it('should return undefined if pass incorrect token', async () => {
-            jest.spyOn(redisService, 'getUserId').mockResolvedValue(undefined)
-            expect(await service.validateToken(APP_ID, 'invalidToken')).toBeUndefined()
-        })
     })
-
-    describe('validateRefreshToken', () => {
-        it('should return TokenValidationResult', async () => {
-            const userAppGetUserIdByRefreshTokenSpy = jest.spyOn(userAppService, 'getUserIdByRefreshToken')
-            expect(await service.validateRefreshToken(APP_ID, REFRESH_TOKEN)).toStrictEqual({
-                id: USER_ID,
-                appId: APP_ID,
-            } as TokenValidationResult)
-            expect(userAppGetUserIdByRefreshTokenSpy).toBeCalledWith(APP_ID, REFRESH_TOKEN)
-        })
-
-        it('should return undefined with invalid refresh token', async () => {
-            jest.spyOn(userAppService, 'getUserIdByRefreshToken').mockResolvedValue(undefined)
-            expect(await service.validateRefreshToken(APP_ID, 'invalidRefreshToken')).toBeUndefined()
-        })
-    })
-
-    describe('refreshAccessToken', () => {
-        it('should return access token data', async () => {
-            const userAppRefreshItSpy = jest.spyOn(userAppService, 'refreshIt')
+    describe('validateTokenFallback', () => {
+        it('should return userId as fallback from database', async () => {
+            const getUserIdByTokenSpy = jest.spyOn(userAppService, 'getUserIdByToken')
             const redisSetUserTokenSpy = jest.spyOn(redisService, 'setUserToken')
-            expect(await service.refreshAccessToken(APP_ID, USER_ID)).toStrictEqual({
-                appId: APP_ID,
-                refreshToken: CLEAR_REFRESH_TOKEN,
-                accessToken: RANDOM_CHAR_AS_ACCESS_TOKEN,
-            } as AccessTokenData)
-            expect(userAppRefreshItSpy).toBeCalledWith(APP_ID, USER_ID)
-            expect(redisSetUserTokenSpy).toBeCalledWith(APP_ID, USER_ID, RANDOM_CHAR_AS_ACCESS_TOKEN)
-        })
-
-        it('should return undefined with invalid appId or userId', async () => {
-            jest.spyOn(userAppService, 'refreshIt').mockResolvedValue(undefined)
-            expect(await service.refreshAccessToken('badAppId', 'badUserId')).toBeUndefined()
+            await service['validateTokenFallback']('appId', 'token')
+            expect(getUserIdByTokenSpy).toBeCalledWith('appId', 'token')
+            expect(redisSetUserTokenSpy).toBeCalledWith('appId', 'userId', 'token')
         })
     })
 })

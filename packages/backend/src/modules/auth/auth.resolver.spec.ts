@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 
 import { MutationStatus, UserApp } from '@my-emotions/types'
 
-import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID, COOKIE_REFRESH_TOKEN } from 'common/constants'
+import { COOKIE_ACCESS_TOKEN, COOKIE_APP_ID } from 'common/constants'
 import { EmotionAuthGuard } from 'common/guard'
 import { UserAppService } from 'common/service/userApp.service'
 
@@ -76,7 +76,6 @@ describe('AuthResolver', () => {
             expect(revokeAppSpy).toBeCalledWith('currentUserId', 'userId')
             expect(clearCookieFn).toBeCalledWith(COOKIE_APP_ID)
             expect(clearCookieFn).toBeCalledWith(COOKIE_ACCESS_TOKEN)
-            expect(clearCookieFn).toBeCalledWith(COOKIE_REFRESH_TOKEN)
         })
     })
 })

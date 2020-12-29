@@ -14,12 +14,8 @@ export class UserApp extends BaseEntity {
     @Column({ name: 'user_id' })
     userId: string
 
-    @Column('text', { name: 'refresh_token' })
-    refreshToken: string
-
-    @Field()
-    @Column('timestamptz', { name: 'refreshed_at' })
-    refreshedAt: Date
+    @Column('text', { name: 'token' })
+    token: string
 
     @Field()
     @Column('timestamptz', { name: 'authorized_at' })
