@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "pluginsFile": false,
+  "fixturesFolder": false,
+  "env":{
+    "TESTING_HELPER_API": "http://localhost:5050/testing-helper"
+  }
+}

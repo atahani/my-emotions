@@ -8,8 +8,31 @@ on:
             - '!README.md'
 
 jobs:
-    build:
+    build_and_test:
         runs-on: ubuntu-18.04
+        services:
+            postgres:
+                image: postgis/postgis:9.5-2.5-alpine
+                env:
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_USER: postgres
+                    POSTGRES_DB: my_emotions_test
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+            redis:
+                image: redis
+                options: >-
+                    --health-cmd "redis-cli ping"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 6379:6379
 
         strategy:
             matrix:
@@ -39,7 +62,24 @@ jobs:
             - name: Install Dependencies on The Root
               run: yarn install
 
-            - name: Test & Build PWA
+            - name: Build backend and PWA for e2e Testing
+              env:
+                  CI: true
+                  REACT_APP_GOOGLE_SIGN_IN_URI: 'http://localhost:5050/auth/google'
+                  REACT_APP_SERVER_GRAPHQL_URI_HTTP: 'http://localhost:5050/graphql'
+                  REACT_APP_SERVER_GRAPHQL_URI_WS: 'ws://localhost:5050/graphql'
+                  REACT_APP_PWA_URL: 'http://localhost:3000'
+              run: yarn run lerna run --scope @my-emotions/backend --scope @my-emotions/pwa build
+
+            - name: Run PWA e2e Testing
+              working-directory: ./packages/pwa
+              env:
+                  CI: true
+                  POSTGRES_DB: my_emotions_test
+                  NODE_ENV: test
+              run: yarn run cy:ci
+
+            - name: Build PWA
               working-directory: ./packages/pwa
               env:
                   CI: true
@@ -48,7 +88,7 @@ jobs:
                   REACT_APP_SERVER_GRAPHQL_URI_HTTP: ${{ secrets.REACT_APP_SERVER_GRAPHQL_URI_HTTP }}
                   REACT_APP_SERVER_GRAPHQL_URI_WS: ${{ secrets.REACT_APP_SERVER_GRAPHQL_URI_WS }}
                   REACT_APP_PWA_URL: ${{ secrets.REACT_APP_PWA_URL }}
-              run: yarn run test --passWithNoTests && yarn run build
+              run: yarn run build
 
             - name: Upload Build
               uses: actions/upload-artifact@v2
@@ -58,7 +98,7 @@ jobs:
 
     build_and_push_docker:
         runs-on: ubuntu-18.04
-        needs: [build]
+        needs: [build_and_test]
         steps:
             - name: Checkout Repository and Go to PWA package
               uses: actions/checkout@v2
