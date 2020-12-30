@@ -97,4 +97,12 @@ describe('User Service', () => {
             expect(repoFindOneSpy).toBeCalledWith({ id: 'badId' })
         })
     })
+
+    describe('getUserByEmail', () => {
+        it('should return user by email', async () => {
+            const repoFindOne = jest.spyOn(repo, 'findOne')
+            expect(await service.getUserByEmail('email@mail.com')).toStrictEqual(user)
+            expect(repoFindOne).toBeCalledWith({ email: 'email@mail.com' })
+        })
+    })
 })

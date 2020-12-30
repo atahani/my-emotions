@@ -41,4 +41,8 @@ export class UserService {
         const user = await this.userRepository.findOne({ id })
         return plainToClass(UserProfileView, user)
     }
+
+    async getUserByEmail(email: string): Promise<User> {
+        return await this.userRepository.findOne({ email })
+    }
 }
