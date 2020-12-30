@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
-import { GqlExecutionContext } from '@nestjs/graphql'
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql'
 import { Response as ExpressResponse } from 'express'
 
 import { CustomRequest } from 'common/types'
@@ -14,16 +14,29 @@ export class EmotionAuthGuard implements CanActivate {
     constructor(private readonly authService: AuthService) {}
 
     async canActivate(ctx: ExecutionContext): Promise<boolean> {
-        const context = GqlExecutionContext.create(ctx)
-        // in subscription mode we get ws.UpgradeReq from connection which we passed on the graphql configuration
-        const { req: graphqlReq, res, connection } = context.getContext<{
-            req: CustomRequest
-            res: ExpressResponse
-            connection: { context: { req: CustomRequest } }
-        }>()
-        const req = graphqlReq ? graphqlReq : connection.context.req
+        let req: CustomRequest
+        let res: ExpressResponse
+        switch (ctx.getType<GqlContextType>()) {
+            case 'graphql': {
+                const context = GqlExecutionContext.create(ctx)
+                // in subscription mode we get ws.UpgradeReq from connection which we passed on the graphql configuration
+                const { req: graphqlReq, res: graphqlRes, connection } = context.getContext<{
+                    req: CustomRequest
+                    res: ExpressResponse
+                    connection: { context: { req: CustomRequest } }
+                }>()
+                req = graphqlReq ? graphqlReq : connection.context.req
+                res = graphqlRes
+                break
+            }
+            case 'http':
+                req = ctx.switchToHttp().getRequest<CustomRequest>()
+                res = ctx.switchToHttp().getResponse<ExpressResponse>()
+            default:
+                break
+        }
 
-        if (!req.cookies && !this.inTestingMode) {
+        if (!req && !req.cookies && !this.inTestingMode) {
             return false
         }
 
