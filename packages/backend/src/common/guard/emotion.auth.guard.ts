@@ -40,8 +40,12 @@ export class EmotionAuthGuard implements CanActivate {
             return false
         }
 
-        const appId = this.inTestingMode ? req.headers[COOKIE_APP_ID] : req.cookies[COOKIE_APP_ID]
-        const token = this.inTestingMode ? req.headers[COOKIE_ACCESS_TOKEN] : req.cookies[COOKIE_ACCESS_TOKEN]
+        const appId =
+            req.cookies && req.cookies[COOKIE_APP_ID] ? req.cookies[COOKIE_APP_ID] : req.headers[COOKIE_APP_ID]
+        const token =
+            req.cookies && req.cookies[COOKIE_ACCESS_TOKEN]
+                ? req.cookies[COOKIE_ACCESS_TOKEN]
+                : req.headers[COOKIE_ACCESS_TOKEN]
 
         if (!token || !appId) {
             return false

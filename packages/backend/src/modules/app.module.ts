@@ -5,6 +5,7 @@ import { RavenModule, RavenInterceptor } from 'nest-raven'
 import * as path from 'path'
 
 import { GraphqlModuleWithRoot } from './graphql.module'
+import { TestingHelperModule } from './testingHelper/testingHelper.module'
 import { TypeOrmModuleWithRoot } from './typeorm.module'
 
 @Module({
@@ -13,6 +14,7 @@ import { TypeOrmModuleWithRoot } from './typeorm.module'
         ConfigModule.load(path.resolve(__dirname, '../config', '**/!(*.d).{ts,js}')),
         GraphqlModuleWithRoot,
         TypeOrmModuleWithRoot,
+        TestingHelperModule,
     ],
     providers: [
         {
