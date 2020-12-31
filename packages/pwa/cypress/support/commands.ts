@@ -6,7 +6,8 @@ declare namespace Cypress {
         restoreLocalStorageCache: () => void
         clearLocalStorageCache: () => void
         wipeDatabase: () => Chainable<Cypress.Response>
-        signUpTestUser: (firstName?: string, lastName?: string, email?: string) => void
+        signUpTestUser: (firstName?: string, lastName?: string, email?: string) => Chainable
+        insertTonsOfEmotions: (count: number) => Chainable<Cypress.Response>
     }
 }
 
@@ -39,5 +40,9 @@ Cypress.Commands.add('signUpTestUser', (firstName = 'firstName', lastName = 'las
         lastName,
         email,
     })
-    cy.visit('/login/callback')
+    return cy.visit('/login/callback')
+})
+
+Cypress.Commands.add('insertTonsOfEmotions', (count: number) => {
+    return cy.request('POST', `${Cypress.env('TESTING_HELPER_API')}/emotions/insert/bulk?count=${count}`)
 })
