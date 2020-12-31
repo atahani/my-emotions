@@ -5,8 +5,8 @@ context('Logging Into Application', () => {
     })
 
     beforeEach(() => {
-        cy.visit('/')
         cy.restoreLocalStorageCache()
+        Cypress.Cookies.preserveOnce('access-token', 'app-id')
     })
 
     afterEach(() => {
@@ -14,20 +14,18 @@ context('Logging Into Application', () => {
     })
 
     it('should navigate login page by clicking on the login button', () => {
+        cy.visit('/')
         cy.get('[alt="👣"]').click()
-        cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/login')
-        })
+        cy.location('pathname').should('eq', '/login')
     })
 
     it('should handle login/callback in the good way and login into the application', () => {
+        cy.visit('/')
         // since we are using google authentication we mock login by testing helper endpoint
         cy.signUpTestUser()
         cy.getCookies().should('have.length', 2)
 
-        cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/')
-        })
+        cy.location('pathname').should('eq', '/')
         cy.window().then((win) => {
             expect(win.localStorage.getItem('is_logged_in')).to.be.eq('true')
             expect(win.localStorage.getItem('user_profile')).to.be.not.undefined
@@ -42,14 +40,11 @@ context('Logging Into Application', () => {
 
         cy.get('[alt="🏃🏻"]').click()
 
-        cy.location().should((loc) => {
-            expect(loc.pathname).to.eq('/')
-        })
+        cy.location('pathname').should('eq', '/')
 
         cy.window().then((win) => {
             expect(win.localStorage.getItem('is_logged_in')).to.be.null
             expect(win.localStorage.getItem('user_profile')).to.be.null
         })
-        cy.getCookies().should('have.length', 0)
     })
 })
