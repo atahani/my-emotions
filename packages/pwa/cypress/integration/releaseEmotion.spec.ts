@@ -22,7 +22,7 @@ context('Release an Emotion', () => {
     it('should be able to release a new emotion', () => {
         const emotionText = 'I love writing e2e tests by Cypress.'
 
-        cy.get('#emoji-mart-search-2').type('test')
+        cy.get('[type="search"]').type('test')
         cy.get('[aria-label="Search Results"] > .emoji-mart-category-list > :nth-child(1) > .emoji-mart-emoji').click()
         cy.get('[alt="▶️"]').click()
 
