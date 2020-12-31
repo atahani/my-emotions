@@ -47,8 +47,8 @@ export class TestingHelperController {
             email: input.email,
         })
         const tokenData = await this.authService.getAccessToken(user, ThirdPartyAuthenticatorType.GOOGLE)
-        setCookie(COOKIE_ACCESS_TOKEN, tokenData.accessToken)
-        setCookie(COOKIE_APP_ID, tokenData.appId)
+        setCookie(COOKIE_ACCESS_TOKEN, tokenData.accessToken, { path: '/' })
+        setCookie(COOKIE_APP_ID, tokenData.appId, { path: '/' })
         return await this.userService.getUserProfileViewById(user.id)
     }
 
