@@ -40,7 +40,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "cy:open": "cypress open",
-        "cy:run": "cypress run",
+        "cy:run": "cypress run --record",
         "cy:start:pre": "lerna run --scope @my-emotions/backend --scope @my-emotions/pwa start:test",
         "cy:start": "start-test cy:start:pre http://localhost:3000 cy:open",
         "cy:ci:pre": "lerna run --scope @my-emotions/backend --scope @my-emotions/pwa start:prod",
